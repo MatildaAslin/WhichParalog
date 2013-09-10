@@ -15,21 +15,20 @@ use Bio::SimpleAlign;
 
 #Declaring variables
 my $input;
-my $seq;
+my $leaf;
 
 #Saving input parameters
 GetOptions ("i|input=s" => \$input);
 
-#Load alignment file
-my $str = Bio::AlignIO->new(-file =>$input, -format => 'fasta');
-my $alignment = $str->next_aln();
+#Load tree file
+my $str = Bio::TreeIO->new(-file =>$input, -format => 'nexus');
+my $tree = $str->next_tree();
 
-#Loops over all seqs in alignment
-foreach $seq ( $alignment->each_seq() ){
+my @leaves = $tree->get_leaf_nodes();
+
+#Loops over all leaves
+foreach (@leaves){
 	
 	#Converts $seq to string and prints
-	print $seq->seq . "\n"
+	print $_->id . "\n"
 }
-
-
-
