@@ -1,1 +1,1 @@
-perl splitGenes.pl -i example/arCOG00034_pruned.fasta
+perl split.pl -i example/arCOG00358_pruned.fasta
