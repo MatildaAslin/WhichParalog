@@ -17,29 +17,52 @@ use Bio::SimpleAlign;
 my $treefile;
 my $groupfile;
 my $leaf;
-my %group;
+my %groups;
+my $speciesName;
+my %leavesName;
+my @paralogSpecies;
 
 #Saving input parameters
 GetOptions ("t|treefile=s" => \$treefile, "g|groupfile=s" => \$groupfile);
 
 open(INFILE, $groupfile) or die "Can't open file: $!\n";
 
-foreach my $line (<INFILE>) {
-	print $line;
-}
-
 #Make hash out of groupfile
+foreach my $line (<INFILE>) { 
 
+	chomp($line);
+		
+	my ($groupname, $protein) = split("\t", $line);
+	
+	my @species = split("_", $protein);
+
+	#$groups{$species[0] . "_" . $species[1]} = $groupname;
+
+	$groups{$species[0]} = $groupname;
+}
 
 #Load tree file
 my $str = Bio::TreeIO->new(-file =>$treefile, -format => 'nexus');
 my $tree = $str->next_tree();
 
+#Puts all leaves in an array
 my @leaves = $tree->get_leaf_nodes();
 
-#Loops over all leaves
+#Loops over all leaves and puts the speciesnames in hash
 foreach (@leaves){
-	
-	#Converts $seq to string and prints
-	#print $_->id . "\n"
+	my $proteinID = $_->id;
+	my @id = split("_", $proteinID);
+	$speciesName = $id[0] . "_" . $id[1];
+	$leavesName{$speciesName}++;
+}
+
+#Check if there are >1 of one species in tree
+for (keys %leavesName){
+	if($leavesName{$_} > 1){
+		push(@paralogSpecies,$_);
+	}
+}
+
+for(@paralogSpecies){
+	print $_ . "\n";
 }
