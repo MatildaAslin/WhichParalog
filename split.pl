@@ -34,7 +34,7 @@ foreach $seq($aln->each_seq){
 }
 
 for (my $i=1; $i<scalar(@all); $i++){
-	if ($all[$i] eq $all[$i-1]){
+	if ($all[$i] eq $all[$i+1]){
 		#go through the genes and check if they can be split-genes, 
 		#save candidat incase more than one copie
 		#If it is a candidate, save the number i so it can be 
