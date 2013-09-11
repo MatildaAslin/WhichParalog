@@ -14,14 +14,25 @@ use Bio::Tree::TreeI;
 use Bio::SimpleAlign;
 
 #Declaring variables
-my $input;
+my $treefile;
+my $groupfile;
 my $leaf;
+my %group;
 
 #Saving input parameters
-GetOptions ("i|input=s" => \$input);
+GetOptions ("t|treefile=s" => \$treefile, "g|groupfile=s" => \$groupfile);
+
+open(INFILE, $groupfile) or die "Can't open file: $!\n";
+
+foreach my $line (<INFILE>) {
+	print $line;
+}
+
+#Make hash out of groupfile
+
 
 #Load tree file
-my $str = Bio::TreeIO->new(-file =>$input, -format => 'nexus');
+my $str = Bio::TreeIO->new(-file =>$treefile, -format => 'nexus');
 my $tree = $str->next_tree();
 
 my @leaves = $tree->get_leaf_nodes();
@@ -30,5 +41,5 @@ my @leaves = $tree->get_leaf_nodes();
 foreach (@leaves){
 	
 	#Converts $seq to string and prints
-	print $_->id . "\n"
+	#print $_->id . "\n"
 }
