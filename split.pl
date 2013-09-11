@@ -34,12 +34,30 @@ foreach $seq($aln->each_seq){
 }
 
 for (my $i=1; $i<scalar(@all); $i++){
-	if ($all[$i] eq $all[$i+1]){
+	if ($all[$i] eq $all[$i+1]) {
+	    
 		#go through the genes and check if they can be split-genes, 
 		#save candidat incase more than one copie
 		#If it is a candidate, save the number i so it can be 
 		#removed it it actually is a split gene
-		print $all[$i]."\n";
+		#print $all[$i]."\n";
+	}
+}
+
+my @alnArray = $aln->each_seq;
+for (my $i=1; $i<scalar(@alnArray) - 1; $i++) {
+
+    #compare if species is the same, i.e. the names are equal
+    my @nameCurrent = split(/_/, $alnArray[$i]->id);
+    my @nameNext = split(/_/, $alnArray[$i+1]->id);
+    #species are defined by the first two words of their id
+	if ($nameCurrent[0].$nameCurrent[1] eq $nameNext[0].$nameNext[1]) {
+	    print $nameCurrent[0].$nameCurrent[1]." ".$nameNext[0].$nameNext[1]."\n";
+	    #print $alnArray[$i]->seq."\n".$alnArray[$i+1]->seq."\n";
+	    #compare the number of gaps in the sequences
+	    my $currentGaps = countGaps($alnArray[$i]->seq);
+	    my $nextGaps = countGaps($alnArray[$i+1]->seq);
+	    print $currentGaps . ", " . $nextGaps . "\n";
 	}
 }
 
@@ -63,3 +81,30 @@ for (my $i=1; $i<scalar(@all); $i++){
 # Check these genes if they seem to be split. Check the length of gene. 
 # See how many gaps there are (some kind of count for where the gap is).
 # If gap on different places, put them together. Realigned.
+
+# make sure input is a sequence object. Count gaps in sequence
+sub countGaps {
+    my $sequence = $_[0];
+    #split String to get each character individually
+    my @splitSeq = split(//, $sequence);
+
+    #counters for current number of gaps and maximum number of gaps
+    my $gapCounter = 0;
+    my $maxGaps = 0;
+
+    foreach my $char (@splitSeq) {
+        if ($char eq '-') { #count number of gaps in a row
+            ++$gapCounter;
+        } elsif ($gapCounter > $maxGaps) {
+            $maxGaps = $gapCounter;
+            $gapCounter = 0;
+        } else {
+            $gapCounter = 0;
+        }
+    }
+    if ($gapCounter > $maxGaps) {
+            $maxGaps = $gapCounter;
+    }
+    
+    return $maxGaps;
+}
