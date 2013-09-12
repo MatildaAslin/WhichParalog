@@ -1,0 +1,191 @@
+#NEXUS
+
+BEGIN TAXA;
+
+	DIMENSIONS ntax=110;
+
+	TAXLABELS
+
+	Methanoplanus_petro_307352867[&!color=#-3407872]
+	Methanosarcina_aceti_20092352[&!color=#-3407872]
+	Methanohalobium_eve_298676052[&!color=#-3407872]
+	Methanocella_paludi_282165652[&!color=#-3407872]
+	Methanosaeta_thermo_116754195[&!color=#-3407872]
+	Uncultured_Marine_G_374723842[&!color=#-3407872]
+	Aciduliprofundum_bo_289596107[&!color=#-3407872]
+	Picrophilus_torridus_48477813[&!color=#-3407872]
+	Ferroplasma_acidarm_257077010[&!color=#-3407872]
+	Thermoplasma_acidoph_16082126[&!color=#-3407872]
+	Ferroglobus_placidu_288931813[&!color=#-3407872]
+	Archaeoglobus_fulgid_11498598[&!color=#-3407872]
+	Ca_Micrarchaeum_aci_255513422[&!color=#-16738048]
+	Thermotoga_maritima_MS_TM1859[&!color=#-8355712]
+	Rickettsia_prowazekii_M_RP761[&!color=#-8355712]
+	Campylobacter_jejuni__Cj1673c[&!color=#-8355712]
+	Escherichia_coli_K_12_s_b2699[&!color=#-8355712]
+	Rhodopirellula_baltic_RB11863[&!color=#-8355712]
+	Chlamydia_trachomatis_D_CT650[&!color=#-8355712]
+	Bacillus_subtilis_16_BSU16940[&!color=#-8355712]
+	Borrelia_burgdorferi_B_BB0131[&!color=#-8355712]
+	Bacteroides_thetaiota_BT_4610[&!color=#-8355712]
+	Synechocystis_PCC_680_sll0569[&!color=#-8355712]
+	Arabidopsis_tha_AT2G45280.1_P
+
+	Homo_sapiens_ENSP00000336701[&!color=#-16449536]
+	Halalkalicoccus_jeo_300710392[&!color=#-3407872]
+	Haloferax_volcanii__292656668[&!color=#-3407872]
+	Methanopyrus_kandler_20094468[&!color=#-3407872]
+	Ca_Korarchaeum_cryp_170291049[&!color=#-3599223]
+	Methanopyrus_kandler_20094878[&!color=#-3407872]
+	Nanoarchaeum_equitan_41615212[&!color=#-16738048]
+	Desulfurococcus_kam_218884526[&!color=#-16777012]
+	Thermosphaera_aggre_296242500[&!color=#-16777012]
+	Staphylothermus_mar_126465874[&!color=#-16777012]
+	Ignicoccus_hospital_156937796[&!color=#-16777012]
+	Fervidicoccus_fonti_385805797[&!color=#-16777012]
+	Ignisphaera_aggrega_305663856[&!color=#-16777012]
+	Metallosphaera_sedu_146302794[&!color=#-16777012]
+	Metallosphaera_cupr_330833876[&!color=#-16777012]
+	Sulfolobus_solfatari_15897194[&!color=#-16777012]
+	Sulfolobus_islandic_238620342[&!color=#-16777012]
+	Acidianus_hospitali_332796456[&!color=#-16777012]
+	Sulfolobus_acidocald_70606517[&!color=#-16777012]
+	Sulfolobus_tokodaii__15920489[&!color=#-16777012]
+	Hyperthermus_butyli_124027840[&!color=#-16777012]
+	Pyrolobus_fumarii_1_347523524[&!color=#-16777012]
+	Aeropyrum_pernix_K1_14600463[&!color=#-16777012]
+	Acidilobus_saccharo_302348270[&!color=#-16777012]
+	Tetrahymena_ther_XP_001024231[&!color=#-16449536]
+	Trichomonas_vaginalis_A9NIQ8[&!color=#-16449536]
+	Entamoeba_histolytica__C4LTR6[&!color=#-16449536]
+	Plasmodium_falcip_MAL8P1.76_1
+
+	Arabidopsis_tha_AT3G22880.1_P
+
+	Leishmania_infant_LinJ35.5000[&!color=#-16449536]
+	Saccharomyces_cerevis_YER179W[&!color=#-16449536]
+	Homo_sapiens_ENSP00000216024[&!color=#-16449536]
+	Plasmodium_falcip_PF11_0087_1
+
+	Trichomonas_vaginalis_A2FXT7[&!color=#-16449536]
+	Tetrahymena_thermophil_O76341[&!color=#-16449536]
+	Homo_sapiens_ENSP00000267868[&!color=#-16449536]
+	Saccharomyces_cerevis_YER095W[&!color=#-16449536]
+	Dictyostelium_dis_DDB_0232316[&!color=#-16449536]
+	Dictyostelium_DDBDRAFT_0217219[&!color=#-16449536]
+	Leishmania_infant_LinJ28.0560[&!color=#-16449536]
+	Arabidopsis_tha_AT5G20850.1_P
+
+	Entamoeba_histolytica__C4M4K4[&!color=#-16449536]
+	Ca_Nitrososphaera_g_408404276[&!color=#-26368]
+	Caldiarchaeum_subte_343485007[&!color=#-26368]
+	Ca_Nitrososphaera_g_408405119[&!color=#-26368]
+	Cenarchaeum_symbios_118575453[&!color=#-26368]
+	Nitrosopumilus_mari_161528894[&!color=#-26368]
+	Nitrosoarchaeum_kor_340345410[&!color=#-26368]
+	Nitrosoarchaeum_lim_329766408[&!color=#-26368]
+	Geoarchaeon_NAG1_2504814042[&!color=#-16777012]
+	Thermofilum_pendens_119719653[&!color=#-16777012]
+	Thermofilum_pendens_119719925[&!color=#-16777012]
+	Vulcanisaeta_distri_307596612[&!color=#-16777012]
+	Caldivirga_maquilin_159041684[&!color=#-16777012]
+	Thermoproteus_uzoni_327311698[&!color=#-16777012]
+	Pyrobaculum_aerophil_18312075[&!color=#-16777012]
+	Pyrobaculum_calidif_126460684[&!color=#-16777012]
+	Vulcanisaeta_distri_307595014[&!color=#-16777012]
+	Vulcanisaeta_distri_307594299[&!color=#-16777012]
+	Thermoproteus_uzoni_327310834[&!color=#-16777012]
+	Pyrobaculum_aerophil_18313927[&!color=#-16777012]
+	Pyrobaculum_calidif_126460634[&!color=#-16777012]
+	Pyrobaculum_calidif_126459376[&!color=#-16777012]
+	Thermofilum_pendens_119719931[&!color=#-16777012]
+	Ca_Korarchaeum_cryp_170290825[&!color=#-3599223]
+	Caldiarchaeum_subte_343485851[&!color=#-26368]
+	Ca_Nanosalinarum_sp_339756691[&!color=#-3407872]
+	Ca_Nanosalina_sp_J0_339758547[&!color=#-3407872]
+	Methanocaldococcus_j_15669060[&!color=#-3407872]
+	Methanotorris_igneu_333909896[&!color=#-3407872]
+	Methanococcus_marip_159905833[&!color=#-3407872]
+	Ca_Parvarchaeum_aci_290559566[&!color=#-16738048]
+	Methanothermus_ferv_312136410[&!color=#-3407872]
+	Methanothermobacter__15679382[&!color=#-3407872]
+	Methanobacterium_AL_325957924[&!color=#-3407872]
+	Methanosphaera_stadt_84490269[&!color=#-3407872]
+	Thermococcus_kodakar_57641834[&!color=#-3407872]
+	Pyrococcus_furiosus__18978298[&!color=#-3407872]
+	Haloarcula_marismort_55379507[&!color=#-3407872]
+	Halobacterium_NRC_1_15791243[&!color=#-3407872]
+	Haloferax_volcanii__292654282[&!color=#-3407872]
+	Halalkalicoccus_jeo_300709641[&!color=#-3407872]
+	Methanospirillum_hun_88604173[&!color=#-3407872]
+	Methanoculleus_mari_126179861[&!color=#-3407872]
+	Methanocorpusculum__124485461[&!color=#-3407872]
+	Methanosphaerula_pa_219850727[&!color=#-3407872]
+;
+
+END;
+
+BEGIN TREES;
+
+TREE my_tree =  ((Methanoplanus_petro_307352867:0.18358682028815279108,((((Methanosarcina_aceti_20092352:0.11137347104125300268,Methanohalobium_eve_298676052:0.14918701242754089931)[&bootstrap=82]:0.05584589751592288626,(Methanocella_paludi_282165652:0.12400421231814846845,Methanosaeta_thermo_116754195:0.15298317959192414550)[&bootstrap=53]:0.02870554936751883168)[&bootstrap=54]:0.04305726571057751778,(Uncultured_Marine_G_374723842:0.43465924874561384650,((Aciduliprofundum_bo_289596107:0.16528425295293006081,((Picrophilus_torridus_48477813:0.06624672810649701038,Ferroplasma_acidarm_257077010:0.07785639508179088841)[&bootstrap=100]:0.07507085426378183601,Thermoplasma_acidoph_16082126:0.06957304912141966391)[&bootstrap=99]:0.13911648961554007320)[&bootstrap=76]:0.10784193774157858903,((Ferroglobus_placidu_288931813:0.14941173503125992905,Archaeoglobus_fulgid_11498598:0.13001995339014327246)[&bootstrap=93]:0.06350344852363443149,((Ca_Micrarchaeum_aci_255513422:0.49036979631590282835,((((((Thermotoga_maritima_MS_TM1859:0.20534368968570040903,(((((Rickettsia_prowazekii_M_RP761:0.20943872267141142030,(Campylobacter_jejuni__Cj1673c:0.22804348896255985379,Escherichia_coli_K_12_s_b2699:0.23246391315914871623)[&bootstrap=26]:0.03246947501919657253)[&bootstrap=18]:0.02680390136990974323,(Rhodopirellula_baltic_RB11863:0.31699116936405385969,Chlamydia_trachomatis_D_CT650:0.23636200745636623544)[&bootstrap=60]:0.08551175166662382254)[&bootstrap=10]:0.03634871125794719715,(Bacillus_subtilis_16_BSU16940:0.11375953915404855843,Borrelia_burgdorferi_B_BB0131:0.32464268587100503227)[&bootstrap=40]:0.06617521230259548748)[&bootstrap=14]:0.04566562882077248448,Bacteroides_thetaiota_BT_4610:0.21731260207024913345)[&bootstrap=10]:0.03094422622769908357,Synechocystis_PCC_680_sll0569:0.26150750034891839801)[&bootstrap=22]:0.05409828014612351466)[&bootstrap=100]:1.98992302919321328858,((Arabidopsis_tha_AT2G45280.1_P:0.39826154412654946047,Homo_sapiens_ENSP00000336701[&!color=#-3407872]:0.65149238555704291898)[&bootstrap=100]:0.54317222511376495042,(((Halalkalicoccus_jeo_300710392[&!color=#-3407872]:0.21889054156678269814,Haloferax_volcanii__292656668[&!color=#-3407872]:0.09072681784102930302)[&bootstrap=100]:2.72218579861540277420,Methanopyrus_kandler_20094468[&!color=#-3407872]:0.96503222802588450868)[&bootstrap=40]:0.18425806279704573520,Ca_Korarchaeum_cryp_170291049[&!color=#-3407872]:1.15708223347600736020)[&bootstrap=49]:0.28355199877081699311)[&bootstrap=14]:0.04297103859503124262)[&bootstrap=9]:0.10082766646235415131,Methanopyrus_kandler_20094878[&!color=#-3407872]:0.65340869580547189521)[&bootstrap=12]:0.11620792031531784749,(Nanoarchaeum_equitan_41615212:0.35339235098524862666,(((Desulfurococcus_kam_218884526:0.08407780156332211874,Thermosphaera_aggre_296242500:0.09548971808431185038)[&bootstrap=100]:0.06778224315322821381,Staphylothermus_mar_126465874:0.07806255989764650238)[&bootstrap=100]:0.09408936537811678213,(Ignicoccus_hospital_156937796:0.13219879662834208012,(((Fervidicoccus_fonti_385805797:0.14646761838422764357,(Ignisphaera_aggrega_305663856:0.24646627643828733500,((Metallosphaera_sedu_146302794:0.01623338969234277770,Metallosphaera_cupr_330833876:0.01818877656209354904)[&bootstrap=97]:0.11071240411672493564,((Sulfolobus_solfatari_15897194:0.00000122123005994819,Sulfolobus_islandic_238620342:0.00282779126977987559)[&bootstrap=100]:0.07471430489678981823,(Acidianus_hospitali_332796456:0.05252509109173838370,(Sulfolobus_acidocald_70606517:0.05038456709811339751,Sulfolobus_tokodaii__15920489:0.02235654182221419317)[&bootstrap=98]:0.05040062465126431135)[&bootstrap=80]:0.02429837657083159033)[&bootstrap=50]:0.02053186166344196303)[&bootstrap=95]:0.07953382955936226517)[&bootstrap=49]:0.03740681776873459180)[&bootstrap=44]:0.02784099858506096023,(Hyperthermus_butyli_124027840:0.04845521907933843242,Pyrolobus_fumarii_1_347523524:0.15613809315596427485)[&bootstrap=84]:0.04458972808053770359)[&bootstrap=36]:0.01563106072499403226,(Aeropyrum_pernix_K1_14600463:0.11969835953032728626,Acidilobus_saccharo_302348270:0.11037140388766975008)[&bootstrap=96]:0.08035575128906888298)[&bootstrap=25]:0.03179127709311279498)[&bootstrap=46]:0.03640562331841337013)[&bootstrap=94]:0.20607726267243017815)[&bootstrap=26]:0.05039535012492733085)[&bootstrap=1]:0.05735432295226223359,((((Tetrahymena_ther_XP_001024231[&!color=#-3407872]:0.57994696119016420077,((Trichomonas_vaginalis_A9NIQ8[&!color=#-3407872]:0.29942346682111575795,((Entamoeba_histolytica__C4LTR6[&!color=#-3407872]:0.20131975300331486634,Plasmodium_falcip_MAL8P1.76_1:0.32969722611791019151)[&bootstrap=50]:0.06801512088400239742,((Arabidopsis_tha_AT3G22880.1_P:0.28874848603345770748,Leishmania_infant_LinJ35.5000[&!color=#-3407872]:0.19805941119993902833)[&bootstrap=36]:0.05070106564484255784,(Saccharomyces_cerevis_YER179W[&!color=#-3407872]:0.41622836194461632076,Homo_sapiens_ENSP00000216024[&!color=#-3407872]:0.25141188252010249204)[&bootstrap=69]:0.07921522078061035699)[&bootstrap=20]:0.04531470392666835101)[&bootstrap=25]:0.03555857465928641964)[&bootstrap=83]:0.09876832575248309376,((Plasmodium_falcip_PF11_0087_1:0.36704976318245224887,Trichomonas_vaginalis_A2FXT7[&!color=#-3407872]:0.14905933219153849612)[&bootstrap=65]:0.05608169333088990072,(Tetrahymena_thermophil_O76341[&!color=#-3407872]:0.24451102971931099050,((Homo_sapiens_ENSP00000267868[&!color=#-3407872]:0.09763459799685623997,(Saccharomyces_cerevis_YER095W[&!color=#-3407872]:0.26924613357162208160,((Dictyostelium_dis_DDB_0232316[&!color=#-3407872]:0.00000122123005994819,Dictyostelium_DDBDRAFT_0217219[&!color=#-3407872]:0.00000122123005994819)[&bootstrap=100]:0.21647655715380664798,Leishmania_infant_LinJ28.0560[&!color=#-3407872]:0.22249659383934414225)[&bootstrap=22]:0.02392985217679036158)[&bootstrap=32]:0.03227471122692111838)[&bootstrap=23]:0.02463891212281738713,(Arabidopsis_tha_AT5G20850.1_P:0.23571061286121264278,Entamoeba_histolytica__C4M4K4[&!color=#-3407872]:0.26563188501269491271)[&bootstrap=26]:0.03353367814812510672)[&bootstrap=24]:0.03920394619185326585)[&bootstrap=25]:0.02274950498238487856)[&bootstrap=86]:0.19953608275498452285)[&bootstrap=72]:0.15879337059836334811)[&bootstrap=86]:0.24141279910587729041,((Ca_Nitrososphaera_g_408404276[&!color=#-3407872]:0.37718048559390859875,Caldiarchaeum_subte_343485007[&!color=#-3407872]:0.27899156274800718247)[&bootstrap=74]:0.13550210890995875723,(Ca_Nitrososphaera_g_408405119[&!color=#-3407872]:0.31260622525100478786,(Cenarchaeum_symbios_118575453:0.25797896298410571969,(Nitrosopumilus_mari_161528894:0.03960663301311123652,(Nitrosoarchaeum_kor_340345410:0.00514837842891825975,Nitrosoarchaeum_lim_329766408:0.01618528809312254693)[&bootstrap=73]:0.01879061608917333148)[&bootstrap=94]:0.12179133952508301719)[&bootstrap=77]:0.16365504513126169495)[&bootstrap=94]:0.14954721454897315636)[&bootstrap=63]:0.09763449650841411753)[&bootstrap=27]:0.05229091944775755840,((Geoarchaeon_NAG1_2504814042:0.35332029875667242402,((Thermofilum_pendens_119719653[&!color=#-3407872]:0.73739110186454093210,Thermofilum_pendens_119719925[&!color=#-3407872]:0.07265579096027566242)[&bootstrap=77]:0.17221410115398261276,((Vulcanisaeta_distri_307596612[&!color=#-3407872]:0.07201545257457593607,Caldivirga_maquilin_159041684:0.12822244967098728186)[&bootstrap=95]:0.09033630599960659757,(Thermoproteus_uzoni_327311698[&!color=#-3407872]:0.11142900132704150473,(Pyrobaculum_aerophil_18312075[&!color=#-3407872]:0.03093012931649058092,Pyrobaculum_calidif_126460684[&!color=#-3407872]:0.04260272995739827762)[&bootstrap=94]:0.04126936504804767231)[&bootstrap=98]:0.11358964574636593037)[&bootstrap=82]:0.07133413553125306228)[&bootstrap=75]:0.09961498442541753817)[&bootstrap=65]:0.09523266922742015805,((Vulcanisaeta_distri_307595014[&!color=#-3407872]:0.28386317151934442604,((Vulcanisaeta_distri_307594299[&!color=#-3407872]:0.61573758943736167648,(Thermoproteus_uzoni_327310834[&!color=#-3407872]:0.29186108627949808314,(Pyrobaculum_aerophil_18313927[&!color=#-3407872]:0.09623834803066287635,(Pyrobaculum_calidif_126460634[&!color=#-3407872]:0.01075900210843769300,Pyrobaculum_calidif_126459376[&!color=#-3407872]:0.02153698930131825104)[&bootstrap=100]:0.09344341494856558961)[&bootstrap=99]:0.21873952894416459625)[&bootstrap=99]:0.28954316880586877803)[&bootstrap=99]:0.27738606624910427945,Thermofilum_pendens_119719931[&!color=#-3407872]:0.44251246033477409370)[&bootstrap=82]:0.12050990120737102573)[&bootstrap=97]:0.50481354371590025920,Ca_Korarchaeum_cryp_170290825[&!color=#-3407872]:0.35472559057560276718)[&bootstrap=12]:0.08020674743165560894)[&bootstrap=3]:0.03349089704302735809)[&bootstrap=18]:0.08188303459552657981,Caldiarchaeum_subte_343485851[&!color=#-3407872]:0.44566542093892264065)[&bootstrap=5]:0.01408055462598496732)[&bootstrap=4]:0.03796839888585918504,((Ca_Nanosalinarum_sp_339756691:0.10078935614542570975,Ca_Nanosalina_sp_J0_339758547:0.13937644397863266366)[&bootstrap=99]:0.32360799154053976334,((Methanocaldococcus_j_15669060:0.02663666777993568130,(Methanotorris_igneu_333909896:0.04229740047159560867,Methanococcus_marip_159905833:0.15554000962083708304)[&bootstrap=100]:0.09134232112524491576)[&bootstrap=100]:0.39878029629584504923,(Ca_Parvarchaeum_aci_290559566:0.46068177841177587739,(Methanothermus_ferv_312136410:0.05633006496253251810,(Methanothermobacter__15679382:0.02965932735117564681,(Methanobacterium_AL_325957924:0.05395594198858352786,Methanosphaera_stadt_84490269:0.10233680796614068320)[&bootstrap=94]:0.05068537914965334790)[&bootstrap=76]:0.06110988013831330362)[&bootstrap=99]:0.24363893605988184987)[&bootstrap=15]:0.04292811760213908340)[&bootstrap=6]:0.01473982260306780714)[&bootstrap=10]:0.03352593692097760592)[&bootstrap=7]:0.01158123704537457853)[&bootstrap=42]:0.07101457017116268033,(Thermococcus_kodakar_57641834:0.05313776790248259108,Pyrococcus_furiosus__18978298:0.08538210027288757609)[&bootstrap=100]:0.17879513277785030745)[&bootstrap=51]:0.04289988768818599196)[&bootstrap=45]:0.03501692007121134931)[&bootstrap=30]:0.05098436095020017489)[&bootstrap=53]:0.03347448074423092779)[&bootstrap=62]:0.06341901959863728566,(Haloarcula_marismort_55379507:0.09643631371021174625,(Halobacterium_NRC_1_15791243:0.11323569144424772137,(Haloferax_volcanii__292654282[&!color=#-3407872]:0.09908960427457447206,Halalkalicoccus_jeo_300709641[&!color=#-3407872]:0.08055787262118029035)[&bootstrap=39]:0.03319869504376170982)[&bootstrap=68]:0.03528106613579345269)[&bootstrap=100]:0.22781487351986326462)[&bootstrap=99]:0.16435950231875698369)[&bootstrap=88]:0.05869647306818881471,(Methanospirillum_hun_88604173:0.15747936396511119650,(Methanoculleus_mari_126179861:0.14700088305710040659,Methanocorpusculum__124485461:0.15019960875186325056)[&bootstrap=69]:0.04299537753354625014)[&bootstrap=55]:0.02196369769307194089,Methanosphaerula_pa_219850727:0.09654140152923294804);
+END;
+
+begin figtree;
+        set appearance.backgroundColour=#-1;
+        set appearance.branchColorAttribute="User Selection";
+        set appearance.branchLineWidth=1.0;
+        set appearance.foregroundColour=#-16777216;
+        set appearance.selectionColour=#-2144520576;
+        set branchLabels.displayAttribute="bootstrap";
+        set branchLabels.fontName="Arial";
+        set branchLabels.fontSize=10;
+        set branchLabels.fontStyle=0;
+        set branchLabels.isShown=true;
+        set branchLabels.significantDigits=4;
+        set layout.layoutType="RECTILINEAR";
+        set layout.zoom=0;
+        set nodeBars.barWidth=4.0;
+        set nodeLabels.displayAttribute="Node ages";
+        set nodeLabels.fontName="Arial";
+        set nodeLabels.fontSize=8;
+        set nodeLabels.fontStyle=0;
+        set nodeLabels.isShown=false;
+        set nodeLabels.significantDigits=4;
+        set polarLayout.alignTipLabels=false;
+        set polarLayout.angularRange=0;
+        set polarLayout.rootAngle=0;
+        set polarLayout.rootLength=100;
+        set polarLayout.showRoot=true;
+        set radialLayout.spread=0.0;
+        set rectilinearLayout.alignTipLabels=false;
+        set rectilinearLayout.curvature=0;
+        set rectilinearLayout.rootLength=100;
+        set scale.offsetAge=0.0;
+        set scale.rootAge=1.0;
+        set scale.scaleFactor=1.0;
+        set scale.scaleRoot=false;
+        set scaleAxis.automaticScale=true;
+        set scaleAxis.fontSize=8.0;
+        set scaleAxis.isShown=false;
+        set scaleAxis.lineWidth=1.0;
+        set scaleAxis.majorTicks=0.1;
+        set scaleAxis.origin=0.0;
+        set scaleAxis.significantDigits=4;
+        set scaleBar.automaticScale=true;
+        set scaleBar.fontSize=10.0;
+        set scaleBar.isShown=true;
+        set scaleBar.lineWidth=1.0;
+        set scaleBar.scaleRange=0.0;
+        set scaleBar.significantDigits=4;
+        set tipLabels.displayAttribute="Names";
+        set tipLabels.fontName="Arial";
+        set tipLabels.fontSize=9;
+        set tipLabels.fontStyle=0;
+        set tipLabels.isShown=true;
+        set tipLabels.significantDigits=4;
+        set trees.order=false;
+        set trees.orderType="increasing";
+        set trees.rootingType="User Selection";
+        set trees.transform=false;
+        set trees.transformType="cladogram";
+end;
