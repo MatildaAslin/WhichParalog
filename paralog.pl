@@ -36,7 +36,7 @@ foreach my $line (<INFILE>) {
 	chomp($line);
 		
 	my ($groupname, $protein) = split("\t", $line);
-		
+	
 	my @species = split("_", $protein);
 
 	$groups{$species[0]} = $groupname;
@@ -55,8 +55,23 @@ for (@leaves){
 	}
 }
 
-#re-root tree with bacteria (the first one in the array)
-$tree->reroot($bacteria[0]); 
+#Number of bacteria in the tree
+my $noBacteria = @bacteria;
+
+#Checks if there are 3 or more bacteria in the tree
+if ($noBacteria < 3){
+	die "ERROR: Tree has less than 3 bacteria.\n";
+}
+
+#Checks if the bacterial species in the tree are monophyletic 
+if (checkIfMonophyletic(\@bacteria)){
+	#re-root tree with bacteria (the first one in the array)
+	$tree->reroot($bacteria[0]); 
+}
+#Temporary else-statement
+else {
+	die "Bacteria in tree are not monophyletic!";
+}
 
 #get leaves of re-rooted tree
 my @reLeaves = $tree->get_leaf_nodes();
@@ -68,22 +83,17 @@ for (@reLeaves){
 	}
 }
 
-my $lca = $tree->get_lca(-nodes => \@reBacteria);
-
-print $lca . "\n";
-	
 
 #Loops over all leaves and puts the speciesnames in hash
 foreach (@leaves){
 	
-	my $proteinID = $_->id;
-	
-	my @id = split("_", $proteinID) ;
+	my $firstName = getName($_, 1);
 	
 	#Checks that all species names coorrespond to the ones in the groupfile
-	typoLocator($id[0]) or die "ERROR: Typo (" . $id[0] . ") in treefile: " . $treefile . "\n Please correct this before running Tree Doctor\n" ;
+	typoLocator($firstName) or die "ERROR: Typo (" . $firstName . ") in treefile: " . $treefile . "\n Please correct this before running Tree Doctor\n" ;
 	
-	$speciesName = $id[0] . "_" . $id[1];
+	#first and second part of id
+	$speciesName = getName($_, 2);
 	
 	$leavesName{$speciesName}++;
 }
@@ -100,12 +110,6 @@ for(@paralogSpecies){
 	print $_ . "\n";
 }
 
-#For debugging
-#foreach my $key (keys %leavesName){
-#	my @damp = split("_", $key); 
-#	print $damp[0] . " => " . $groups{$damp[0]} . "\n";
-#}
-
 sub checkIfBacteria{
 	my $nodeName = $_[0]->id;
 	my @splitSpecies = split("_", $nodeName);
@@ -120,4 +124,65 @@ sub typoLocator{
 	if ($groups{$_[0]}){
 		return 1;
 	}
+}
+
+sub checkIfMonophyletic{
+	my @nodes = @{$_[0]};
+	my $lca = $tree->get_lca(-nodes => \@nodes);
+	my @children;
+	
+	foreach ($lca->get_all_Descendents()){
+		if	($_->is_Leaf()){
+			push(@children, $_);
+		}
+	}	
+			
+	if (checkIfWithinTheSameGroup(\@children)){
+		return 1;
+	}		
+	else {
+		return 0;
+	}	
+
+}	
+
+sub checkIfWithinTheSameGroup{
+	my @nodeArray = @{$_[0]};
+	my @compareArray;	
+		
+	for(@nodeArray){
+		
+		push(@compareArray, getName($_, 1));
+		
+	}
+	
+	my $groupName = $groups{$compareArray[0]};
+	
+	foreach (@compareArray){
+	
+		if ($groups{$_} ne $groupName){
+			return 0;
+		}
+	}
+	
+	return 1;	
+		
+}	 
+
+# First parameter: Node
+#Second parameter: 1 = return only first part of name. 2 = return first and second part
+sub getName{
+	my $node = $_[0];
+	my $namePos = $_[1];
+	my $outName;
+	
+	my @splitSpecies = split("_", $node->id); 
+	
+	if ($namePos == 1){
+		return $splitSpecies[0];		
+	}
+	else {	
+		return $splitSpecies[0] . "_" . $splitSpecies[1];
+	}
+	
 }
