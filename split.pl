@@ -52,12 +52,17 @@ for (my $i=1; $i<scalar(@alnArray) - 1; $i++) {
     my @nameNext = split(/_/, $alnArray[$i+1]->id);
     #species are defined by the first two words of their id
 	if ($nameCurrent[0].$nameCurrent[1] eq $nameNext[0].$nameNext[1]) {
-	    print $nameCurrent[0].$nameCurrent[1]." ".$nameNext[0].$nameNext[1]."\n";
-	    #print $alnArray[$i]->seq."\n".$alnArray[$i+1]->seq."\n";
-	    #compare the number of gaps in the sequences
-	    my $currentGaps = countGaps($alnArray[$i]->seq);
-	    my $nextGaps = countGaps($alnArray[$i+1]->seq);
-	    print $currentGaps . ", " . $nextGaps . "\n";
+	    my $currentAln = $alnArray[$i]->seq;
+    my $nextAln = $alnArray[$i+1]->seq;
+    
+    #make bitwise or to find overlaps
+    my $or = $currentAln | $nextAln;
+    (my $overlap = $or) =~ s/[^A-Z]//g;
+
+    print "s1:      '$currentAln'\n";
+    print "s2:      '$nextAln'\n";
+    print "OR:      '$or'\n";
+    printf "Overlap  '%s' (%d)\n", $overlap, length $overlap;
 	}
 }
 
