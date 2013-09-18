@@ -9,6 +9,7 @@ use Bio::TreeIO;
 use IO::String;
 use Bio::AlignIO;
 use Bio::Align::ProteinStatistics;
+use Bio::Tools::Run::AnalysisFactory;
 use Bio::Tree::DistanceFactory;
 use Bio::Tree::TreeI;
 use Bio::SimpleAlign;
@@ -73,11 +74,9 @@ for(my $i=0; $i<$aln->no_sequences; $i++){
 		if (($secpos[0]-$pos[1]<10) && ($secpos[0]!=0)){
 			@pos=($pos[0],$secpos[1]);
 		}
-		push(@blastinfo, $name[$i], $pos[0], $pos[1]);
+		my blastaln=$aln->slice($pos[0],$pos[1]);
 	}
 }
-
-my $blastaln=$aln->slice($blastinfo[$k*3+1],$blastinfo[$k*3+2]);
 
 print $blastinfo[0]."\n";
 print $blastinfo[1]."\n";
@@ -92,8 +91,8 @@ print $blastinfo[9]."\n";
 print $blastinfo[10]."\n";
 print $blastinfo[11]."\n";
 
-# 		my $factory = Bio::Tools::Run::AnalysisFactory::Pise->new();
-#         my $psiblast = $factory->program('psiblast');
+		my $factory = Bio::Tools::Run::AnalysisFactory::Pise->new();
+        my $psiblast = $factory->program('psiblast');
 # 		my $gene=$aln->get_seq_by_pos($i+1);
 # 		print $gene->seq;
 # 	print $aln->length()."\n";
