@@ -30,7 +30,7 @@ GetOptions ("t|treefile=s" => \$treefile, "g|groupfile=s" => \$groupfile);
 
 open(INFILE, $groupfile) or die "Can't open file: $!\n";
 
-#Make hash out of groupfile
+#Make hash out of groupfile (Key: Species, Value: Group) 
 foreach my $line (<INFILE>) { 
 
 	chomp($line);
@@ -49,6 +49,8 @@ my $tree = $str->next_tree();
 #Puts all leaves in an array
 my @leaves = $tree->get_leaf_nodes();
 
+
+#Put all bacterial nodes in an array
 for (@leaves){
 	if( checkIfBacteria($_) ){
 		push(@bacteria, $_);
@@ -75,6 +77,8 @@ else {
 
 #get leaves of re-rooted tree
 my @reLeaves = $tree->get_leaf_nodes();
+
+print "Number of leaves after re-rooting: " . @reLeaves . "\n";
 
 #gets bacterial nodes of re-rooted tree
 for (@reLeaves){
@@ -105,10 +109,53 @@ for (keys %leavesName){
 	}
 }
 
-print "Paralog species:\n";
-for(@paralogSpecies){
-	print $_ . "\n";
+my @nodesToRemove;
+
+foreach (@paralogSpecies){
+	my @paralogNodes;
+	my $paralog = $_;
+	
+	for(@leaves){
+		
+		if(getName($_, 2) eq $paralog){
+		push(@paralogNodes, $_);
+		}
+	}
+	
+	my %branchLengths;
+	for(@paralogNodes){
+		$branchLengths{$_->id} = $_->branch_length();
+	}
+
+	
+	#Node with shortest branch is detected
+	my $min_key;
+	my $min_value = 100;
+	while ((my $key, my $value) = each %branchLengths) {
+  		if ($value < $min_value) {
+    		$min_value = $value;
+    		$min_key = $key;
+  		}
+	}
+
+	for (keys %branchLengths){
+		if ($_ ne $min_key){
+		
+			$tree->remove_Node($tree->find_node(-id => $_))
+			
+		}
+	}
+
 }
+
+
+my @paraFreeLeaves = $tree->get_leaf_nodes();
+
+print "Number of leaves after paralogs are removed: " . @paraFreeLeaves . "\n";
+
+#			 	
+# Subroutines
+#
 
 sub checkIfBacteria{
 	my $nodeName = $_[0]->id;
