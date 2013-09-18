@@ -52,40 +52,19 @@ for (my $i=1; $i<scalar(@alnArray) - 1; $i++) {
     my @nameNext = split(/_/, $alnArray[$i+1]->id);
     #species are defined by the first two words of their id
 	if ($nameCurrent[0].$nameCurrent[1] eq $nameNext[0].$nameNext[1]) {
-	    my $currentAln = $alnArray[$i]->seq;
-    my $nextAln = $alnArray[$i+1]->seq;
-    
-    #make bitwise or to find overlaps
-    my $or = $currentAln | $nextAln;
-    (my $overlap = $or) =~ s/[^A-Z]//g;
-
-    print "s1:      '$currentAln'\n";
-    print "s2:      '$nextAln'\n";
-    print "OR:      '$or'\n";
-    printf "Overlap  '%s' (%d)\n", $overlap, length $overlap;
+	    (my $currentAln = $alnArray[$i]->seq) =~ s/-/ /g;
+        (my $nextAln = $alnArray[$i+1]->seq) =~ s/-/ /g;
+        
+        #make bitwise or to find overlaps
+        my $or = $currentAln | $nextAln;
+        (my $overlap = $or) =~ s/[^A-Z]//g;
+        
+        if (length $overlap == 0) {
+            print "$nameCurrent[0].$nameCurrent[1], $nameNext[0].$nameNext[1]:\n";
+            print "OR: $or\n";
+        }
 	}
 }
-
-#Usefull code:
-#  	add seq					$myalgin->add_seq($newseq);
-# 	remove seq				$aln->remove_seq($seq);
-#	get seq by pos			$seq=$aln->get_seq_by_pos($i):
-#	number of genes			no_sequences()
-#	new alignment of seq 1-5			$aln2=$aln->select(1,5); 
-#	write new file			$aln->write_fasta(\*OUTPUT)
-#   					print $aln->length, "\n";
-#   					print $aln->no_residues, "\n";
-#   					print $aln->is_flush, "\n";
-#   					print $aln->no_sequences, "\n";
-#	$factory = Bio::Tools::Run::Alignment::Muscle->new(-format =>  
-#'fasta',  -verbose=>'', -quiet=>'', -log='inv.log');
-#	aln=$factory->align($inputfilename);
-
-#To-do list
-# Check if there are genes from the same organism.
-# Check these genes if they seem to be split. Check the length of gene. 
-# See how many gaps there are (some kind of count for where the gap is).
-# If gap on different places, put them together. Realigned.
 
 # make sure input is a sequence object. Count gaps in sequence
 sub countGaps {
@@ -113,3 +92,18 @@ sub countGaps {
     
     return $maxGaps;
 }
+
+#Usefull code:
+#  	add seq					$myalgin->add_seq($newseq);
+# 	remove seq				$aln->remove_seq($seq);
+#	get seq by pos			$seq=$aln->get_seq_by_pos($i):
+#	number of genes			no_sequences()
+#	new alignment of seq 1-5			$aln2=$aln->select(1,5); 
+#	write new file			$aln->write_fasta(\*OUTPUT)
+#   					print $aln->length, "\n";
+#   					print $aln->no_residues, "\n";
+#   					print $aln->is_flush, "\n";
+#   					print $aln->no_sequences, "\n";
+#	$factory = Bio::Tools::Run::Alignment::Muscle->new(-format =>  
+#'fasta',  -verbose=>'', -quiet=>'', -log='inv.log');
+#	aln=$factory->align($inputfilename);
