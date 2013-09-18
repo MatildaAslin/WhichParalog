@@ -35,64 +35,54 @@ my $aln2 = $str2->next_aln();
 $aln->sort_alphabetically;
 $aln2->sort_alphabetically;
 
-foreach $seq($aln2->each_seq){
+foreach $seq($aln2->each_seq){ #Take away the gaps to count the length
 	my $tmp = $seq->seq();
 	$tmp =~ s/-//g;
 	$seq->seq($tmp);
 	push(@len, length($seq->seq));
 	@id = split(/_/, $seq->id);
-	push(@name, $id[0]." ".$id[1]);
+	push(@name, $id[0]." ".$id[1]); #Get the name of the organism
 }
 
 for(my $i=0; $i<$aln->no_sequences; $i++){
-	if($len[$i]/$aln->length()<0.7){
-		print "Need new blast for sequences number: ".($i+1)."\n";
-		$seq = $aln->get_seq_by_pos($i+1);
-		my @protein=split(//, $seq->seq);
+	if($len[$i]/$aln->length()<0.7){ #See if the sequence cover less than 70% of alignment
+		print "Need new blast for sequence: ".$name[$i]."\n"; #Just to check if it is working
+		$seq = $aln->get_seq_by_pos($i+1); #get sequence with gap
+		my @protein=split(//, $seq->seq); #put sequence in array
 		my $start=0;
 		my $stop=0;
 		my $longest=$stop-$start;
 		my $seclong=0;
 		my @secpos=(0,0);
-		for (my $j=0;$j<scalar(@protein);$j++){
+		for (my $j=0;$j<scalar(@protein);$j++){	#Find the longest gap (and the seconde longest)
  			if($protein[$j] eq "-"){
 	 			$start=$j;
 	 			while(($j<scalar(@protein))&&($protein[$j] eq "-")) {
 		 			$j++;
 		 		}
 		 		$stop=$j;
-		 		if($longest<$stop-$start){
+		 		if($longest<$stop-$start){	#Gives the positions for the longest gap
 			 		$longest=$stop-$start;
 			 		@pos=($start,$stop);
 			 	}
-			 	if(($seclong<$stop-$start)&&($longest>$stop-$start)){
+			 	if(($seclong<$stop-$start)&&($longest>$stop-$start)){ #Gives the positions for the secondlongest gap
 				 	$seclong=$stop-$start;
 			 		@secpos=($start,$stop);
 			 	}
 	 		}
 		}
-		if (($secpos[0]-$pos[1]<10) && ($secpos[0]!=0)){
+		if (($secpos[0]-$pos[1]<10) && ($secpos[0]!=0)){ #If the longest and secondlongest gap is close together we merge them
 			@pos=($pos[0],$secpos[1]);
 		}
-		my blastaln=$aln->slice($pos[0],$pos[1]);
+		my $blastaln=$aln->slice($pos[0]+1,$pos[1]); #Take the alignment for the gap and use for blast
+#  		foreach $seq($blastaln->each_seq){
+#  			print $seq->seq()."\n";
+#  		}
 	}
 }
 
-print $blastinfo[0]."\n";
-print $blastinfo[1]."\n";
-print $blastinfo[2]."\n";
-print $blastinfo[3]."\n";
-print $blastinfo[4]."\n";
-print $blastinfo[5]."\n";
-print $blastinfo[6]."\n";
-print $blastinfo[7]."\n";
-print $blastinfo[8]."\n";
-print $blastinfo[9]."\n";
-print $blastinfo[10]."\n";
-print $blastinfo[11]."\n";
-
 		my $factory = Bio::Tools::Run::AnalysisFactory::Pise->new();
-        my $psiblast = $factory->program('psiblast');
+       my $psiblast = $factory->program('psiblast');
 # 		my $gene=$aln->get_seq_by_pos($i+1);
 # 		print $gene->seq;
 # 	print $aln->length()."\n";
