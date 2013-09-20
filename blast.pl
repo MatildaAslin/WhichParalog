@@ -1,5 +1,4 @@
 #!/usr/bin/perl
-
 use strict;
 use warnings;
 use Bio::SeqIO;
@@ -81,8 +80,16 @@ for(my $i=0; $i<$aln->no_sequences; $i++){
 	}
 }
 
-		my $factory = Bio::Tools::Run::AnalysisFactory::Pise->new();
-       my $psiblast = $factory->program('psiblast');
+my $factory = Bio::Tools::Run::AnalysisFactory->new();
+my $psiblast = $factory->program('psiblast');
+
+
+#Things to think about
+#Should we compare strings with the same name first and if one of them are longer than 70% we don't have to look on the other?
+
+
+
+
 # 		my $gene=$aln->get_seq_by_pos($i+1);
 # 		print $gene->seq;
 # 	print $aln->length()."\n";
