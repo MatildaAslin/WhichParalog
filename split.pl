@@ -33,7 +33,7 @@ foreach $seq($aln->each_seq){
 	push(@all, $name[0].$name[1]);
 }
 
-for (my $i=1; $i<scalar(@all); $i++){
+for (my $i=1; $i<scalar(@all) - 1; $i++){
 	if ($all[$i] eq $all[$i+1]) {
 	    
 		#go through the genes and check if they can be split-genes, 
@@ -52,58 +52,53 @@ for (my $i=1; $i<scalar(@alnArray) - 1; $i++) {
     my @nameNext = split(/_/, $alnArray[$i+1]->id);
     #species are defined by the first two words of their id
 	if ($nameCurrent[0].$nameCurrent[1] eq $nameNext[0].$nameNext[1]) {
-	    (my $currentAln = $alnArray[$i]->seq) =~ s/-/ /g;
-        (my $nextAln = $alnArray[$i+1]->seq) =~ s/-/ /g;
+	    my $currentAln = $alnArray[$i]->seq; # This removing the '-' charachter
+        my $nextAln = $alnArray[$i+1]->seq;  # and then adding it again is not very pretty :(
         
         #make bitwise or to find overlaps
         my $or = $currentAln | $nextAln;
+        $or =~ s/ /-/g;
         (my $overlap = $or) =~ s/[^A-Z]//g;
         
-        if (length $overlap == 0) {
-            print "$nameCurrent[0].$nameCurrent[1], $nameNext[0].$nameNext[1]:\n";
-            print "OR: $or\n";
+        if (length $overlap <= 10) { # What overlap threshold is good?
+        # calculate mean of alignment
+            if (calcMean($currentAln) < calcMean($nextAln)) {
+                $alnArray[$i]->seq($currentAln . $nextAln);
+                $aln->remove_seq($alnArray[$i+1]);
+            } else {
+                $alnArray[$i]->seq($nextAln . $currentAln);
+                $aln->remove_seq($alnArray[$i+1]);
+            }
         }
 	}
 }
 
-# make sure input is a sequence object. Count gaps in sequence
-sub countGaps {
-    my $sequence = $_[0];
-    #split String to get each character individually
-    my @splitSeq = split(//, $sequence);
-
-    #counters for current number of gaps and maximum number of gaps
-    my $gapCounter = 0;
-    my $maxGaps = 0;
-
-    foreach my $char (@splitSeq) {
-        if ($char eq '-') { #count number of gaps in a row
-            ++$gapCounter;
-        } elsif ($gapCounter > $maxGaps) {
-            $maxGaps = $gapCounter;
-            $gapCounter = 0;
-        } else {
-            $gapCounter = 0;
-        }
-    }
-    if ($gapCounter > $maxGaps) {
-            $maxGaps = $gapCounter;
-    }
-    
-    return $maxGaps;
+#removing gaps manually, remove_gaps() gives weird results.
+foreach $seq($aln->each_seq()){        
+    (my $noGaps = $seq->seq) =~ s/-//g;
+    $seq->seq($noGaps);
 }
 
-#Usefull code:
-#  	add seq					$myalgin->add_seq($newseq);
-# 	remove seq				$aln->remove_seq($seq);
-#	get seq by pos			$seq=$aln->get_seq_by_pos($i):
-#	number of genes			no_sequences()
-#	new alignment of seq 1-5			$aln2=$aln->select(1,5); 
-#	write new file			$aln->write_fasta(\*OUTPUT)
-#   					print $aln->length, "\n";
-#   					print $aln->no_residues, "\n";
-#   					print $aln->is_flush, "\n";
-#   					print $aln->no_sequences, "\n";
-#	$factory = Bio::Tools::Run::Alignment::Muscle->new(-format =>  
-#'fasta',  -verbose=>'', -quiet=>'', -log='inv.log');
-#	aln=$factory->align($inputfilename);
+# At the moment the new aligment is written to an output file
+# For future: realing the file and maybe give out the alignment object
+my $alnio = new Bio::AlignIO(-file => '>outputAln.fasta', -format => 'fasta');
+$alnio->write_aln($aln);
+
+# calculate the mean of a sequence
+# sum up the positions of the sequence that are not a gap
+# then divied it by the number of positions
+sub calcMean {
+    my $sequence = $_[0];
+    my @splitSeq = split(//, $sequence);
+    
+    my $mean = 0;
+    my $counter = 0;
+    
+    for (my $i=1; $i<scalar(@splitSeq)-1; $i++) {
+        if ($splitSeq[$i] ne '-') {
+            $mean = $mean + $i;
+            $counter++;
+        }
+    }
+    return ($mean/$counter);
+}
