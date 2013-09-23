@@ -4,11 +4,14 @@ use warnings;
 use Bio::SeqIO;
 use Getopt::Long;
 use File::Slurp;
+use File::Temp;
 use Bio::TreeIO;
 use IO::String;
 use Bio::AlignIO;
 use Bio::Align::ProteinStatistics;
-use Bio::Tools::Run::AnalysisFactory;
+use Bio::Root::Root;
+use Bio::Tools::GuessSeqFormat;
+use Bio::Tools::Run::StandAloneBlastPlus;
 use Bio::Tree::DistanceFactory;
 use Bio::Tree::TreeI;
 use Bio::SimpleAlign;
@@ -21,6 +24,7 @@ my @name;
 my @id;
 my @blastinfo;
 my @pos=(0,0);
+my $factory = Bio::Tools::Run::StandAloneBlastPlus->new();
 
 #Saving input parameters
 GetOptions ("i|input=s" => \$input);
@@ -74,15 +78,14 @@ for(my $i=0; $i<$aln->no_sequences; $i++){
 			@pos=($pos[0],$secpos[1]);
 		}
 		my $blastaln=$aln->slice($pos[0]+1,$pos[1]); #Take the alignment for the gap and use for blast
-#  		foreach $seq($blastaln->each_seq){
+		my $psiblast = $factory->psiblast(-query => $blastaln, -outfile => 'query.bls');
+
+		#  		foreach $seq($blastaln->each_seq){
 #  			print $seq->seq()."\n";
 #  		}
 	}
 }
-
-my $factory = Bio::Tools::Run::AnalysisFactory->new();
-my $psiblast = $factory->program('psiblast');
-
+		
 
 #Things to think about
 #Should we compare strings with the same name first and if one of them are longer than 70% we don't have to look on the other?
