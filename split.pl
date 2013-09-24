@@ -12,12 +12,12 @@ use Bio::Align::ProteinStatistics;
 use Bio::Tree::DistanceFactory;
 use Bio::Tree::TreeI;
 use Bio::SimpleAlign;
+use Bio::Tools::Run::Alignment::MAFFT;
 
 #Declaring variables
 my $input;
 my $seq;
-my @name; #get the name from the seq
-my @all; #all names
+my $factory = Bio::Tools::Run::Alignment::MAFFT->new();
 
 #Saving input parameters
 GetOptions ("i|input=s" => \$input);
@@ -71,6 +71,14 @@ foreach $seq($aln->each_seq()){
 # For future: realing the file and maybe give out the alignment object
 my $alnio = new Bio::AlignIO(-file => '>outputAln.fasta', -format => 'fasta');
 $alnio->write_aln($aln);
+
+# Pass the factory a list of sequences to be aligned.
+my $inputfilename = 'outputAln.fasta';
+# $aln is a SimpleAlign object.
+my $align = $factory->align($inputfilename);
+
+$alnio = new Bio::AlignIO(-file => '>realigned.fasta', -format => 'fasta');
+$alnio->write_aln($align);
 
 # calculate the mean of a sequence
 # sum up the positions of the sequence that are not a gap
