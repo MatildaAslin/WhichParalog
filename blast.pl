@@ -15,6 +15,8 @@ use Bio::Tools::Run::StandAloneBlastPlus;
 use Bio::Tree::DistanceFactory;
 use Bio::Tree::TreeI;
 use Bio::SimpleAlign;
+use Bio::SearchIO;
+use Bio::SearchIO::Writer::HitTableWriter;
 
 #Declaring variables
 my $alignment;
@@ -80,10 +82,14 @@ for(my $i=0; $i<$aln->no_sequences; $i++){
 			@pos=($pos[0],$secpos[1]);
 		}
 		my $blastaln=$aln->slice($pos[0]+1,$pos[1]); #Take the alignment for the gap and use for blast
-		my $species = $name[$i]; # The first two things in the name
+#		my $species = $name[$i]; # The first two things in the name
+		my $species = "Geo";
 		my $factory = Bio::Tools::Run::StandAloneBlastPlus->new(-program  => 'psiblast', -DB_NAME => $db_dir . "/" . $species);
 		my $psiblast = $factory->psiblast(-query => $blastaln);
-		print $psiblast;
+		#print $psiblast;
+		my $writer = Bio::SearchIO::Writer::HitTableWriter->new();
+		my $blio = Bio::SearchIO->new( -file => ">damp", -format=>'blast', -writer => $writer );
+		$blio->write_result($psiblast);
 	}
 }
 		
