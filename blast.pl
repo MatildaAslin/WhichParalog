@@ -17,22 +17,24 @@ use Bio::Tree::TreeI;
 use Bio::SimpleAlign;
 
 #Declaring variables
-my $input;
+my $alignment;
+my $db_dir;
 my $seq;
 my @len;
 my @name;
 my @id;
 my @blastinfo;
 my @pos=(0,0);
-my $factory = Bio::Tools::Run::StandAloneBlastPlus->new();
+
+#my $factory = Bio::Tools::Run::StandAloneBlastPlus->new(-program  => 'psiblast', -DB_NAME => 'Geoarchaeon_NAG1.faa', -DB_DIR => '/Users/Matilda/WhichParalog/testdb');
 
 #Saving input parameters
-GetOptions ("i|input=s" => \$input);
+GetOptions ("a|alignment=s" => \$alignment, "db|db_dir=s" => \$db_dir );
 
 #Load alignment file
-my $str = Bio::AlignIO->new(-file =>$input, -format => 'fasta');
+my $str = Bio::AlignIO->new(-file =>$alignment, -format => 'fasta');
 my $aln = $str->next_aln();
-my $str2 = Bio::AlignIO->new(-file =>$input, -format => 'fasta');
+my $str2 = Bio::AlignIO->new(-file =>$alignment, -format => 'fasta');
 my $aln2 = $str2->next_aln();
 
 $aln->sort_alphabetically;
@@ -78,7 +80,9 @@ for(my $i=0; $i<$aln->no_sequences; $i++){
 			@pos=($pos[0],$secpos[1]);
 		}
 		my $blastaln=$aln->slice($pos[0]+1,$pos[1]); #Take the alignment for the gap and use for blast
-		my $psiblast = $factory->psiblast(-query => $blastaln, -outfile => 'query.bls');
+		my $species = "Geo"; # Should be change to split gene species
+		my $factory = Bio::Tools::Run::StandAloneBlastPlus->new(-program  => 'psiblast', -DB_NAME => $db_dir . "/" . $species);
+		my $psiblast = $factory->psiblast(-query => $blastaln);
 
 		#  		foreach $seq($blastaln->each_seq){
 #  			print $seq->seq()."\n";
