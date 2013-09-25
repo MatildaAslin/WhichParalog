@@ -46,7 +46,7 @@ foreach $seq($aln2->each_seq){ #Take away the gaps to count the length
 	$seq->seq($tmp);
 	push(@len, length($seq->seq));
 	@id = split(/_/, $seq->id);
-	push(@name, $id[0]." ".$id[1]); #Get the name of the organism
+	push(@name, $id[0]."_".$id[1]); #Get the name of the organism
 }
 
 for(my $i=0; $i<$aln->no_sequences; $i++){
@@ -80,13 +80,10 @@ for(my $i=0; $i<$aln->no_sequences; $i++){
 			@pos=($pos[0],$secpos[1]);
 		}
 		my $blastaln=$aln->slice($pos[0]+1,$pos[1]); #Take the alignment for the gap and use for blast
-		my $species = "Geo"; # Should be change to split gene species
+		my $species = $name[$i]; # The first two things in the name
 		my $factory = Bio::Tools::Run::StandAloneBlastPlus->new(-program  => 'psiblast', -DB_NAME => $db_dir . "/" . $species);
 		my $psiblast = $factory->psiblast(-query => $blastaln);
-
-		#  		foreach $seq($blastaln->each_seq){
-#  			print $seq->seq()."\n";
-#  		}
+		print $psiblast;
 	}
 }
 		
