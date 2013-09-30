@@ -1,22 +1,24 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
-use Bio::SeqIO;
-use Getopt::Long;
-use File::Slurp;
-use File::Temp;
-use Bio::TreeIO;
-use IO::String;
-use Bio::AlignIO;
 use Bio::Align::ProteinStatistics;
+use Bio::AlignIO;
+use Bio::LocatableSeq;
 use Bio::Root::Root;
+use Bio::SearchIO;
+use Bio::SearchIO::Writer::HitTableWriter;
+use Bio::SeqIO;
+use Bio::SimpleAlign;
 use Bio::Tools::GuessSeqFormat;
 use Bio::Tools::Run::StandAloneBlastPlus;
 use Bio::Tree::DistanceFactory;
+use Bio::TreeIO;
 use Bio::Tree::TreeI;
-use Bio::SimpleAlign;
-use Bio::SearchIO;
-use Bio::SearchIO::Writer::HitTableWriter;
+use IO::String;
+use File::Slurp;
+use File::Temp;
+use Getopt::Long;
+
 
 #Declaring variables
 my $alignment;
