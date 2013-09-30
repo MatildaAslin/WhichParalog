@@ -18,6 +18,7 @@ use IO::String;
 use File::Slurp;
 use File::Temp;
 use Getopt::Long;
+use Bio::Tools::Run::Alignment::MAFFT;
 
 
 #Declaring variables
@@ -127,14 +128,14 @@ for(my $i=0; $i<$aln->no_sequences; $i++){
 		
 		######### Untested  under here (have no idea if this can work)###########
 		
-		if ($newseq->length()< $blastaln->length()){ #If sequence can fit in gap, realign and get the aligned sequence
+#		if ($newseq->length()< $blastaln->length()){ #If sequence can fit in gap, realign and get the aligned sequence
 			$blastaln->add_seq($newseq);
 			#Download Mafft: http://mafft.cbrc.jp/alignment/software/
 			my $alnfactory=Bio::Tools::Run::Alignment::MAFFT->new(); #Don't know which parameters that should be here
 			my $blastrealn=$alnfactory->align($blastaln);
 			$newseq=$blastrealn->get_seq_by_pos($blastrealn->no_sequences);
 			$aln->add_seq($newseq); #Put the aligened sequence in the alignment and will be treated as a split gene
-		}
+#		}
 		
 ######### The end #################
 	}
