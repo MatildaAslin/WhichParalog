@@ -53,7 +53,6 @@ foreach $seq($aln2->each_seq){ #Take away the gaps to count the length
 
 for(my $i=0; $i<$aln->no_sequences; $i++){
 	if($len[$i]/$aln->length()<0.7){ #See if the sequence cover less than 70% of alignment
-		print "Need new blast for sequence: ".$name[$i]."\n"; #Just to check if it is working
 		$seq = $aln->get_seq_by_pos($i+1); #get sequence with gap
 		my @protein=split(//, $seq->seq); #put sequence in array
 		my $start=0;
@@ -89,49 +88,53 @@ for(my $i=0; $i<$aln->no_sequences; $i++){
 		my $writer = Bio::SearchIO::Writer::HitTableWriter->new();
 		my $blio = Bio::SearchIO->new( -file => ">damp", -format=>'blast', -writer => $writer );
 		$blio->write_result($psiblast);
-	}
-}
 
+		
 ########## New code (the code under and over this works (on it's own, don't know how it works together)) #########
-my @gene;
-my $newgene;
-
-my @columns=split(/\t/, $psiblast[0]);
-my $name=$columns[0]; #Check the name of the best blast
-my $evalue=$columns[5]; #Evalue for the sequence is easy to get
-
-#Maybe you should ask them to choose the path were they have these files instead?
-my $file = 'Acidianus_hospitalis_W1.fasta'; #Should be the same as $species, I put this file next to the code to scip paths
-#my $file = $species;
-open FILEHANDLE, $file or die $!;
-my @organism = <FILEHANDLE>;
-
-for(my $i=0;$i<scalar(@organism);$i++) { 
-	@gene=split(/ /,$organism[$i]);	#Goes trough the organism file
-	if(">".$name eq $gene[0]){	#Find the right gene in the organism file
-		while($organism[$i+1] !~ m/>/){ #Get the sequence
-			$newgene=$newgene.$organism[$i+1];
-			$i++;
+		my @gene;
+		my $newgene;
+		
+		my @columns=split(/\t/, $psiblast[0]);
+		my $name=$columns[0]; #Check the name of the best blast
+		my $evalue=$columns[5]; #Evalue for the sequence is easy to get
+		
+		#Maybe you should ask them to choose the path were they have these files instead?
+		my $file = 'Acidianus_hospitalis_W1.fasta'; #Should be the same as $species, 
+		#I put this file next to the code to not have to worry about paths
+		#my $file = $species;
+		open FILEHANDLE, $file or die $!;
+		my @organism = <FILEHANDLE>;
+		
+		for(my $i=0;$i<scalar(@organism);$i++) { 
+			@gene=split(/ /,$organism[$i]);	#Goes trough the organism file
+			if(">".$name eq $gene[0]){	#Find the right gene in the organism file
+				while($organism[$i+1] !~ m/>/){ #Get the sequence
+					$newgene=$newgene.$organism[$i+1];
+					$i++;
+				}
+				$newgene =~ s/\n//g; #removes enter in the sequence
+			}
 		}
-		$newgene =~ s/\n//g; #removes enter in the sequence
+		my $newseq=Bio::Seq->new(-seq=>$newgene,-id=>">".$name); #Create sequence
+		
+		
+		
+		######### Untested  under here (have no idea if this can work)###########
+		
+		if ($newseq->length()< $blastaln->length()){ #If sequence can fit in gap, realign and get the aligned sequence
+			$blastaln->add_seq($newseq);
+			#Download Mafft: http://mafft.cbrc.jp/alignment/software/
+			my $alnfactory=Bio::Tools::Run::Alignment::MAFFT->new(); #Don't know which parameters that should be here
+			my $blastrealn=$alnfactory->align($blastaln);
+			$newseq=$blastrealn->get_seq_by_pos($blastrealn->no_sequences);
+			$aln->add_seq($newseq); #Put the aligened sequence in the alignment and will be treated as a split gene
+		}
+		
+######### The end #################
 	}
 }
-my $newseq=Bio::Seq->new(-seq=>$newgene,-id=>">".$name); #Create sequence
 
 
-
-######### Untested  under here (have no idea if this can work)########### (because Jessika can't run StandAlone =( )
-
-if ($newseq->length()< $blastaln->length();){ #If sequence can fit in gap, realign and get the aligned sequence
-	$blastaln->add_seq($newseq);
-	#Download Mafft: http://mafft.cbrc.jp/alignment/software/
-	$factory=Bio::Tools::Run::Alignment::MAFFT->new(); #Don't know which parameters that should be here
-	my $blastrealn=$factory->align($blastaln);
-	$newseq=$blastrealn->get_seq_by_pos($blastrealn->no_sequences);
-	$aln->add_seq($newseq); #Put the aligened sequence in the alignment and will be treated as a split gene
-}
-
-######### The end #################
 		
 
 #### Things to think about
