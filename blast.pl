@@ -119,7 +119,7 @@ for(my $i=0; $i<$aln->no_sequences; $i++){
 				$newgene =~ s/\n//g; #removes enter in the sequence
 			}
 		}
-		my $newseq=Bio::Seq->new(-seq=>$newgene,-id=>">".$name); #Create sequence
+		my $newseq=Bio::LocatableSeq->new(-id=>">".$name, -seq=>$newgene); #Create sequence
 		
 		
 		
