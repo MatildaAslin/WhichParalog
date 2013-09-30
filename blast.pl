@@ -86,7 +86,7 @@ for(my $i=0; $i<$aln->no_sequences; $i++){
 		my $factory = Bio::Tools::Run::StandAloneBlastPlus->new(-program  => 'psiblast', -DB_NAME => $db_dir . "/" . $species);
 		my $psiblast = $factory->psiblast(-query => $blastaln);
 		my $writer = Bio::SearchIO::Writer::HitTableWriter->new();
-		my $blio = Bio::SearchIO->new( -file => ">damp", -format=>'blast', -writer => $writer );
+		my $blio = Bio::SearchIO->new( -file => ">BlastResult", -format=>'blast', -writer => $writer );
 		$blio->write_result($psiblast);
 
 		
@@ -94,7 +94,11 @@ for(my $i=0; $i<$aln->no_sequences; $i++){
 		my @gene;
 		my $newgene;
 		
-		my @columns=split(/\t/, $psiblast[0]);
+		my $blastfile = 'BlastResult';
+		open BLASTHANDLE, $blastfile or die $!;
+		my @blastresult = <BLASTHANDLE>;
+		
+		my @columns=split(/\t/, $blastresult[0]);
 		my $name=$columns[0]; #Check the name of the best blast
 		my $evalue=$columns[5]; #Evalue for the sequence is easy to get
 		
