@@ -80,57 +80,60 @@ for(my $i=0; $i<$aln->no_sequences; $i++){
 		if (($secpos[0]-$pos[1]<10) && ($secpos[0]!=0)){ #If the longest and secondlongest gap is close together we merge them
 			@pos=($pos[0],$secpos[1]);
 		}
-		my $blastaln=$aln->slice($pos[0]+1,$pos[1]); #Take the alignment for the gap and use for blast
+		my $blastaln=$aln->slice($pos[0]+1,$pos[1]); #Take the alignment for the gap and use for blast	
 		my $species = $name[$i]; #namnet på databasen
 		my $factory = Bio::Tools::Run::StandAloneBlastPlus->new(-program  => 'psiblast', -DB_NAME => $db_dir . "/" . $species);
 		my $psiblast = $factory->psiblast(-query => $blastaln);
 		my $writer = Bio::SearchIO::Writer::HitTableWriter->new();
-		my $blio = Bio::SearchIO->new( -file => ">BlastResult", -format=>'blast', -writer => $writer );
+		my $blio = Bio::SearchIO->new( -file => ">" . $name[$i] . "_BlastResult", -format=>'blast', -writer => $writer );
 		$blio->write_result($psiblast);
+		
+		my @hits = $psiblast->hits;
+	
+		my @hitsplit = split('\|', $hits[0]->name);
+		 
+		my $hitID = $hitsplit[1];
+		
+		print $name[$i] . " => " . $hitID . "\n"; 
+	
+########## New code (the code under and over this works (on it's own, don't know how it works together)) #########
+ 		my @gene;
+ 		my $newgene;
+# 		
+ 		
+# 		#Maybe you should ask them to choose the path were they have these files instead?
+ 		my $file = "testdb/" . $name[$i];
+ 		open FILEHANDLE, $file or die $!;
+ 		my @organism = <FILEHANDLE>;
+# 		
 
 		
-########## New code (the code under and over this works (on it's own, don't know how it works together)) #########
-# 		my @gene;
-# 		my $newgene;
-# 		
-# 		my $blastfile = 'BlastResult';
-# 		open BLASTHANDLE, $blastfile or die $!;
-# 		my @blastresult = <BLASTHANDLE>;
-# 		
-# 		my @columns=split(/\t/, $blastresult[0]);
-# 		my $name=$columns[0]; #Check the name of the best blast
-# 		my $evalue=$columns[5]; #Evalue for the sequence is easy to get
-# 		
-# 		#Maybe you should ask them to choose the path were they have these files instead?
-# 		my $file = $name[$i].'_'*.fasta';
-# 		open FILEHANDLE, $file or die $!;
-# 		my @organism = <FILEHANDLE>;
-# 		
-# 		for(my $i=0;$i<scalar(@organism);$i++) { 
-# 			@gene=split(/ /,$organism[$i]);	#Goes trough the organism file
-# 			if(">".$name eq $gene[0]){	#Find the right gene in the organism file
-# 				while($organism[$i+1] !~ m/>/){ #Get the sequence
-# 					$newgene=$newgene.$organism[$i+1];
-# 					$i++;
-# 				}
-# 				$newgene =~ s/\n//g; #removes enter in the sequence
-# 			}
-# 		}
-# 		my $newseq=Bio::LocatableSeq->new(-id=>">".$name, -seq=>$newgene); #Create sequence
+ 		for(my $q=0;$q<scalar(@organism);$q++) { 
+ 			@gene=split(/ /,$organism[$i]);	#Goes trough the organism file
+ 			if($organism[$q] =~ m/$hitID/){	#Find the right gene in the organism file
+ 				while($organism[$q+1] !~ m/>/){ #Get the sequence
+ 					$newgene=$newgene.$organism[$q+1];
+ 					$q++;
+ 				}
+ 				$newgene =~ s/\n//g; #removes enter in the sequence
+ 			}
+ 		}
+ 		my $newseq=Bio::LocatableSeq->new(-id=>">".$name[$i], -seq=>$newgene); #Create sequence
+ 		print $newseq->seq . "\n";
 # 		
 # 		
 # 		
 # 		######### Untested  under here (have no idea if this can work)###########
-# 		
-# #		if ($newseq->length()< $blastaln->length()){ #If sequence can fit in gap, realign and get the aligned sequence
+
+#		if ($newseq->length()< $blastaln->length()){ #If sequence can fit in gap, realign and get the aligned sequence
 # 			$blastaln->add_seq($newseq);
 # 			#Download Mafft: http://mafft.cbrc.jp/alignment/software/
 # 			my $alnfactory=Bio::Tools::Run::Alignment::MAFFT->new(); #Don't know which parameters that should be here
 # 			my $blastrealn=$alnfactory->align($blastaln);
 # 			$newseq=$blastrealn->get_seq_by_pos($blastrealn->no_sequences);
 # 			$aln->add_seq($newseq); #Put the aligened sequence in the alignment and will be treated as a split gene
-# #		}
-# 		
+#		}
+ 		
 ######### The end #################
 	}
 }
