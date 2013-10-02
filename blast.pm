@@ -1,4 +1,7 @@
 #!/usr/bin/perl
+
+package Blast;
+
 use strict;
 use warnings;
 use Bio::Align::ProteinStatistics;
@@ -26,6 +29,10 @@ use base 'Exporter';
 our @EXPORT = qw(splitBlast);
 
 sub splitBlast{
+	
+	my $aln = $_[0];
+	my $aln2 = $aln;
+	
 	#Declaring variables
 	my $alignment;
 	my $db_dir;
@@ -40,10 +47,10 @@ sub splitBlast{
 	#GetOptions ("a|alignment=s" => \$alignment, "db|db_dir=s" => \$db_dir );
 
 	#Load alignment file
-	my $str = Bio::AlignIO->new(-file =>$alignment, -format => 'fasta');
-	my $aln = $str->next_aln();
-	my $str2 = Bio::AlignIO->new(-file =>$alignment, -format => 'fasta');
-	my $aln2 = $str2->next_aln();
+#	my $str = Bio::AlignIO->new(-file =>$alignment, -format => 'fasta');
+#	my $aln = $str->next_aln();
+#	my $str2 = Bio::AlignIO->new(-file =>$alignment, -format => 'fasta');
+#	my $aln2 = $str2->next_aln();
 
 	$aln->sort_alphabetically;
 	$aln2->sort_alphabetically;

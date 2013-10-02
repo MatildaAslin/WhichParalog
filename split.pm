@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+package Split;
+
 use strict;
 use warnings;
 use Bio::SeqIO;
@@ -12,7 +14,7 @@ use Bio::Align::ProteinStatistics;
 use Bio::Tree::DistanceFactory;
 use Bio::Tree::TreeI;
 use Bio::SimpleAlign;
-use Bio::Tools::Run::Alignment::MAFFT;
+use Bio::Tools::Run::Alignment::Muscle;
 
 our $VERSION = '1.00';
 use base 'Exporter';
@@ -22,13 +24,13 @@ our @EXPORT = qw(split_gene);
 sub split_gene {
     #Declaring variables
     my $seq;
-    my $factory = Bio::Tools::Run::Alignment::MAFFT->new();
+    my $factory = Bio::Tools::Run::Alignment::Muscle->new();
 
     my $aln = $_[0];
 
     $aln->sort_alphabetically;
 
-    my found_split = false; # boolean flag for checking if file needs to be changed
+    my $found_split = 0; # boolean flag for checking if file needs to be changed
     my @alnArray = $aln->each_seq;
     for (my $i=1; $i<scalar(@alnArray) - 1; $i++) {
 
@@ -46,18 +48,18 @@ sub split_gene {
             (my $overlap = $or) =~ s/[^A-Z]//g;
             
             if (length $overlap <= 5) {
-            found_split = true;
+            $found_split = 1;
             # calculate mean of alignment
                 if (calcMean($currentAln) < calcMean($nextAln)) {
                     $alnArray[$i]->seq($currentAln . $nextAln);
                     $aln->remove_seq($alnArray[$i+1]);
-                    print $nameCurrent[0].$nameCurrent[1] . ":\n" . $currentAln . "\n";
-                    print $nameNext[0].$nameNext[1] . ":\n" . $nextAln . "\n";
+#                    print $nameCurrent[0].$nameCurrent[1] . ":\n" . $currentAln . "\n";
+ #                   print $nameNext[0].$nameNext[1] . ":\n" . $nextAln . "\n";
                 } else {
                     $alnArray[$i]->seq($nextAln . $currentAln);
                     $aln->remove_seq($alnArray[$i+1]);
-                    print $nameCurrent[0].$nameCurrent[1] . ":\n" . $currentAln . "\n";
-                    print $nameNext[0].$nameNext[1] . ":\n" . $nextAln . "\n";
+  #                  print $nameCurrent[0].$nameCurrent[1] . ":\n" . $currentAln . "\n";
+   #                 print $nameNext[0].$nameNext[1] . ":\n" . $nextAln . "\n";
                 }
             }
 	    }
@@ -65,7 +67,7 @@ sub split_gene {
     
     my $align = $aln;
     
-    if (found_split) { # if there are no split genes in the file, nothing has to be done
+    if ($found_split) { # if there are no split genes in the file, nothing has to be done
         #removing gaps manually, remove_gaps() gives weird results.
         foreach $seq($aln->each_seq()){        
             (my $noGaps = $seq->seq) =~ s/-//g;
@@ -73,13 +75,19 @@ sub split_gene {
         }
 
         # At the moment the new aligment is written to an output file for realignment
-        my $alnio = new Bio::AlignIO(-file => '>outputAln.fasta', -format => 'fasta');
-        $alnio->write_aln($aln);
-
+#        my $alnio = new Bio::AlignIO(-file => '>outputAln.fasta', -format => 'fasta');
+ #       $alnio->write_aln($aln);
+		
+		my @seq_array;
+		
+        for my $seq ($aln->each_seq){
+        	push(@seq_array, $seq);
+        }
+        
         # Pass the factory a list of sequences to be aligned.
-        my $inputfilename = 'outputAln.fasta';
+  #      my $inputfilename = 'outputAln.fasta';
         # $aln is a SimpleAlign object.
-        $align = $factory->align($inputfilename);
+        $align = $factory->align(\@seq_array);
     }
     return $align;
 }
