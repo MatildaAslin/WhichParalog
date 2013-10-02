@@ -14,71 +14,75 @@ use Bio::Tree::TreeI;
 use Bio::SimpleAlign;
 use Bio::Tools::Run::Alignment::MAFFT;
 
-#Declaring variables
-my $input;
-my $seq;
-my $factory = Bio::Tools::Run::Alignment::MAFFT->new();
+our $VERSION = '1.00';
+use base 'Exporter';
 
-#Saving input parameters
-GetOptions ("i|input=s" => \$input);
+our @EXPORT = qw(split_gene);
 
-#Load alignment file
-my $str = Bio::AlignIO->new(-file =>$input, -format => 'fasta');
-my $aln = $str->next_aln();
+sub split_gene {
+    #Declaring variables
+    my $seq;
+    my $factory = Bio::Tools::Run::Alignment::MAFFT->new();
 
-$aln->sort_alphabetically;
+    my $aln = $_[0];
 
-my @alnArray = $aln->each_seq;
-for (my $i=1; $i<scalar(@alnArray) - 1; $i++) {
+    $aln->sort_alphabetically;
 
-    #compare if species is the same, i.e. the names are equal
-    my @nameCurrent = split(/_/, $alnArray[$i]->id);
-    my @nameNext = split(/_/, $alnArray[$i+1]->id);
-    #species are defined by the first two words of their id
-	if ($nameCurrent[0].$nameCurrent[1] eq $nameNext[0].$nameNext[1]) {
-	    my $currentAln = $alnArray[$i]->seq;
-        my $nextAln = $alnArray[$i+1]->seq;
-        
-        #make bitwise or to find overlaps
-        my $or = $currentAln | $nextAln;
-        $or =~ s/ /-/g;
-        (my $overlap = $or) =~ s/[^A-Z]//g;
-        
-        if (length $overlap <= 5) { # What overlap threshold is good?
-        # calculate mean of alignment
-            if (calcMean($currentAln) < calcMean($nextAln)) {
-                $alnArray[$i]->seq($currentAln . $nextAln);
-                $aln->remove_seq($alnArray[$i+1]);
-                print $nameCurrent[0].$nameCurrent[1] . ":\n" . $currentAln . "\n";
-                print $nameNext[0].$nameNext[1] . ":\n" . $nextAln . "\n";
-            } else {
-                $alnArray[$i]->seq($nextAln . $currentAln);
-                $aln->remove_seq($alnArray[$i+1]);
-                print $nameCurrent[0].$nameCurrent[1] . ":\n" . $currentAln . "\n";
-                print $nameNext[0].$nameNext[1] . ":\n" . $nextAln . "\n";
+    my found_split = false; # boolean flag for checking if file needs to be changed
+    my @alnArray = $aln->each_seq;
+    for (my $i=1; $i<scalar(@alnArray) - 1; $i++) {
+
+        #compare if species is the same, i.e. the names are equal
+        my @nameCurrent = split(/_/, $alnArray[$i]->id);
+        my @nameNext = split(/_/, $alnArray[$i+1]->id);
+        #species are defined by the first two words of their id
+	    if ($nameCurrent[0].$nameCurrent[1] eq $nameNext[0].$nameNext[1]) {
+	        my $currentAln = $alnArray[$i]->seq;
+            my $nextAln = $alnArray[$i+1]->seq;
+            
+            #make bitwise or to find overlaps
+            my $or = $currentAln | $nextAln;
+            $or =~ s/ /-/g;
+            (my $overlap = $or) =~ s/[^A-Z]//g;
+            
+            if (length $overlap <= 5) {
+            found_split = true;
+            # calculate mean of alignment
+                if (calcMean($currentAln) < calcMean($nextAln)) {
+                    $alnArray[$i]->seq($currentAln . $nextAln);
+                    $aln->remove_seq($alnArray[$i+1]);
+                    print $nameCurrent[0].$nameCurrent[1] . ":\n" . $currentAln . "\n";
+                    print $nameNext[0].$nameNext[1] . ":\n" . $nextAln . "\n";
+                } else {
+                    $alnArray[$i]->seq($nextAln . $currentAln);
+                    $aln->remove_seq($alnArray[$i+1]);
+                    print $nameCurrent[0].$nameCurrent[1] . ":\n" . $currentAln . "\n";
+                    print $nameNext[0].$nameNext[1] . ":\n" . $nextAln . "\n";
+                }
             }
+	    }
+    }
+    
+    my $align = $aln;
+    
+    if (found_split) { # if there are no split genes in the file, nothing has to be done
+        #removing gaps manually, remove_gaps() gives weird results.
+        foreach $seq($aln->each_seq()){        
+            (my $noGaps = $seq->seq) =~ s/-//g;
+            $seq->seq($noGaps);
         }
-	}
+
+        # At the moment the new aligment is written to an output file for realignment
+        my $alnio = new Bio::AlignIO(-file => '>outputAln.fasta', -format => 'fasta');
+        $alnio->write_aln($aln);
+
+        # Pass the factory a list of sequences to be aligned.
+        my $inputfilename = 'outputAln.fasta';
+        # $aln is a SimpleAlign object.
+        $align = $factory->align($inputfilename);
+    }
+    return $align;
 }
-
-#removing gaps manually, remove_gaps() gives weird results.
-foreach $seq($aln->each_seq()){        
-    (my $noGaps = $seq->seq) =~ s/-//g;
-    $seq->seq($noGaps);
-}
-
-# At the moment the new aligment is written to an output file
-# For future: realing the file and maybe give out the alignment object
-my $alnio = new Bio::AlignIO(-file => '>outputAln.fasta', -format => 'fasta');
-$alnio->write_aln($aln);
-
-# Pass the factory a list of sequences to be aligned.
-my $inputfilename = 'outputAln.fasta';
-# $aln is a SimpleAlign object.
-my $align = $factory->align($inputfilename);
-
-$alnio = new Bio::AlignIO(-file => '>realigned.fasta', -format => 'fasta');
-$alnio->write_aln($align);
 
 # calculate the mean of a sequence
 # sum up the positions of the sequence that are not a gap
