@@ -1,20 +1,24 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
-use Bio::SeqIO;
-use Getopt::Long;
-use File::Slurp;
-use File::Temp;
-use Bio::TreeIO;
-use IO::String;
-use Bio::AlignIO;
 use Bio::Align::ProteinStatistics;
+use Bio::AlignIO;
+use Bio::LocatableSeq;
 use Bio::Root::Root;
+use Bio::SearchIO;
+use Bio::SearchIO::Writer::HitTableWriter;
+use Bio::SeqIO;
+use Bio::SimpleAlign;
 use Bio::Tools::GuessSeqFormat;
 use Bio::Tools::Run::StandAloneBlastPlus;
 use Bio::Tree::DistanceFactory;
+use Bio::TreeIO;
 use Bio::Tree::TreeI;
-use Bio::SimpleAlign;
+use IO::String;
+use File::Slurp;
+use File::Temp;
+use Getopt::Long;
+use Bio::Tools::Run::Alignment::MAFFT;
 
 #Declaring variables
 my $alignment;
@@ -25,8 +29,6 @@ my @name;
 my @id;
 my @blastinfo;
 my @pos=(0,0);
-
-#my $factory = Bio::Tools::Run::StandAloneBlastPlus->new(-program  => 'psiblast', -DB_NAME => 'Geoarchaeon_NAG1.faa', -DB_DIR => '/Users/Matilda/WhichParalog/testdb');
 
 #Saving input parameters
 GetOptions ("a|alignment=s" => \$alignment, "db|db_dir=s" => \$db_dir );
@@ -46,12 +48,11 @@ foreach $seq($aln2->each_seq){ #Take away the gaps to count the length
 	$seq->seq($tmp);
 	push(@len, length($seq->seq));
 	@id = split(/_/, $seq->id);
-	push(@name, $id[0]." ".$id[1]); #Get the name of the organism
+	push(@name, $id[0]."_".$id[1]); #Get the name of the organism
 }
 
 for(my $i=0; $i<$aln->no_sequences; $i++){
 	if($len[$i]/$aln->length()<0.7){ #See if the sequence cover less than 70% of alignment
-		print "Need new blast for sequence: ".$name[$i]."\n"; #Just to check if it is working
 		$seq = $aln->get_seq_by_pos($i+1); #get sequence with gap
 		my @protein=split(//, $seq->seq); #put sequence in array
 		my $start=0;
@@ -79,25 +80,68 @@ for(my $i=0; $i<$aln->no_sequences; $i++){
 		if (($secpos[0]-$pos[1]<10) && ($secpos[0]!=0)){ #If the longest and secondlongest gap is close together we merge them
 			@pos=($pos[0],$secpos[1]);
 		}
-		my $blastaln=$aln->slice($pos[0]+1,$pos[1]); #Take the alignment for the gap and use for blast
-		my $species = "Geo"; # Should be change to split gene species
+		my $blastaln=$aln->slice($pos[0]+1,$pos[1]); #Take the alignment for the gap and use for blast	
+		my $species = $name[$i]; #namnet på databasen
 		my $factory = Bio::Tools::Run::StandAloneBlastPlus->new(-program  => 'psiblast', -DB_NAME => $db_dir . "/" . $species);
 		my $psiblast = $factory->psiblast(-query => $blastaln);
+		my $writer = Bio::SearchIO::Writer::HitTableWriter->new();
+		my $blio = Bio::SearchIO->new( -file => ">" . $name[$i] . "_BlastResult", -format=>'blast', -writer => $writer );
+		$blio->write_result($psiblast);
+		
+		my @hits = $psiblast->hits;
+	
+		my @hitsplit = split('\|', $hits[0]->name);
+		 
+		my $hitID = $hitsplit[1];
+		
+		print $name[$i] . " => " . $hitID . "\n"; 
+	
+########## New code (the code under and over this works (on it's own, don't know how it works together)) #########
+ 		my @gene;
+ 		my $newgene;
+# 		
+ 		
+# 		#Maybe you should ask them to choose the path were they have these files instead?
+ 		my $file = "testdb/" . $name[$i];
+ 		open FILEHANDLE, $file or die $!;
+ 		my @organism = <FILEHANDLE>;
+# 		
 
-		#  		foreach $seq($blastaln->each_seq){
-#  			print $seq->seq()."\n";
-#  		}
+		
+ 		for(my $q=0;$q<scalar(@organism);$q++) { 
+ 			@gene=split(/ /,$organism[$i]);	#Goes trough the organism file
+ 			if($organism[$q] =~ m/$hitID/){	#Find the right gene in the organism file
+ 				while($organism[$q+1] !~ m/>/){ #Get the sequence
+ 					$newgene=$newgene.$organism[$q+1];
+ 					$q++;
+ 				}
+ 				$newgene =~ s/\n//g; #removes enter in the sequence
+ 			}
+ 		}
+ 		my $newseq=Bio::LocatableSeq->new(-id=>">".$name[$i], -seq=>$newgene); #Create sequence
+ 		print $newseq->seq . "\n";
+# 		
+# 		
+# 		
+# 		######### Untested  under here (have no idea if this can work)###########
+
+#		if ($newseq->length()< $blastaln->length()){ #If sequence can fit in gap, realign and get the aligned sequence
+# 			$blastaln->add_seq($newseq);
+# 			#Download Mafft: http://mafft.cbrc.jp/alignment/software/
+# 			my $alnfactory=Bio::Tools::Run::Alignment::MAFFT->new(); #Don't know which parameters that should be here
+# 			my $blastrealn=$alnfactory->align($blastaln);
+# 			$newseq=$blastrealn->get_seq_by_pos($blastrealn->no_sequences);
+# 			$aln->add_seq($newseq); #Put the aligened sequence in the alignment and will be treated as a split gene
+#		}
+ 		
+######### The end #################
 	}
 }
+
+
 		
 
-#Things to think about
+#### Things to think about
+#What if this sequence is better than the one we already have? Remove the one we have?
+#Realign? Or just take blast hit that fits?
 #Should we compare strings with the same name first and if one of them are longer than 70% we don't have to look on the other?
-
-
-
-
-# 		my $gene=$aln->get_seq_by_pos($i+1);
-# 		print $gene->seq;
-# 	print $aln->length()."\n";
-# 	print "@len"."\n";
