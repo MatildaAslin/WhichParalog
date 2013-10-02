@@ -14,7 +14,7 @@ use Bio::Align::ProteinStatistics;
 use Bio::Tree::DistanceFactory;
 use Bio::Tree::TreeI;
 use Bio::SimpleAlign;
-use Bio::Tools::Run::Alignment::Muscle;
+use Bio::Tools::Run::Alignment::MAFFT;
 
 our $VERSION = '1.00';
 use base 'Exporter';
@@ -24,7 +24,7 @@ our @EXPORT = qw(split_gene);
 sub split_gene {
     #Declaring variables
     my $seq;
-    my $factory = Bio::Tools::Run::Alignment::Muscle->new();
+    my $factory = Bio::Tools::Run::Alignment::MAFFT->new();
 
     my $aln = $_[0];
 

@@ -22,6 +22,7 @@ use File::Slurp;
 use File::Temp;
 use Getopt::Long;
 use Bio::Tools::Run::Alignment::MAFFT;
+use Storable 'dclone';
 
 our $VERSION = '1.00';
 use base 'Exporter';
@@ -29,13 +30,19 @@ use base 'Exporter';
 our @EXPORT = qw(splitBlast);
 
 sub splitBlast{
+		
+#	my $io = IO::String->new($_[0]);        #Convert string into io-object
+#    my $str = Bio::AlignIO->new(-fh => $io, -format=>'fasta');
+#    my $aln = $str->next_aln();
+#    my $str2 = Bio::AlignIO->new(-fh => $io, -format=>'fasta');
+#    my $aln2 = $str2->next_aln();
 	
 	my $aln = $_[0];
-	my $aln2 = $aln;
+	my $aln2 = dclone($_[0]);
 	
 	#Declaring variables
-	my $alignment;
-	my $db_dir;
+#	my $alignment;
+	my $db_dir = $_[1];
 	my $seq;
 	my @len;
 	my @name;
@@ -76,6 +83,7 @@ sub splitBlast{
 			my @secpos=(0,0);
 			for (my $j=0;$j<scalar(@protein);$j++){	#Find the longest gap (and the seconde longest)
 				if($protein[$j] eq "-"){
+					
 					$start=$j;
 					while(($j<scalar(@protein))&&($protein[$j] eq "-")) {
 						$j++;
@@ -84,10 +92,12 @@ sub splitBlast{
 					if($longest<$stop-$start){	#Gives the positions for the longest gap
 						$longest=$stop-$start;
 						@pos=($start,$stop);
+	
 					}
 					if(($seclong<$stop-$start)&&($longest>$stop-$start)){ #Gives the positions for the secondlongest gap
 						$seclong=$stop-$start;
 						@secpos=($start,$stop);
+						
 					}
 				}
 			}
@@ -107,8 +117,6 @@ sub splitBlast{
 			my @hitsplit = split('\|', $hits[0]->name);
 		 
 			my $hitID = $hitsplit[1];
-		
-			print $name[$i] . " => " . $hitID . "\n"; 
 	
 			my @gene;
 			my $newgene;
@@ -132,7 +140,6 @@ sub splitBlast{
 				}
 			}
 			my $newseq=Bio::LocatableSeq->new(-id=>">".$name[$i], -seq=>$newgene); #Create sequence
-			print $newseq->seq . "\n";
 
 			my @seq_array;
 			if ($newseq->length()< $blastaln->length()){ #If sequence can fit in gap, realign and get the aligned sequence
@@ -153,7 +160,12 @@ sub splitBlast{
 		
 		}
 	}
-
-	return $aln;
+	
+	if (@name != $aln->no_sequences){
+		return $aln;
+	}
+	else{
+		return 0;
+	}
 		
 }

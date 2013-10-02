@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+package Paralog;
+
 use strict;
 use warnings;
 use Bio::SeqIO;
@@ -19,15 +21,12 @@ use base 'Exporter';
 
 our @EXPORT = qw(paralogRemover);
 
-
 sub paralogRemover{
 
-	my $treefile = $_[0];
-	my $groupfile = $_[1];
 
 	#Declaring variables
-	my $treefile;
-	my $groupfile;
+	my $treefile = $_[0];
+	my $groupfile = $_[1];
 	my $leaf;
 	my %groups;
 	my $speciesName;
@@ -36,9 +35,15 @@ sub paralogRemover{
 	my @bacteria;
 	my @reBacteria;
 
+	#Load tree file
+	my $str = Bio::TreeIO->new(-file =>$treefile, -format => 'nexus');
+	my $tree = $str->next_tree();
+
 	open (MYFILE, '>>Paralog-LOG.txt');
 
 	#Saving input parameters
+	
+	
 	#"GetOptions ("t|treefile=s" => \$treefile, "g|groupfile=s" => \$groupfile);
 
 	open(INFILE, $groupfile) or die "Can't open file: $!\n";
@@ -66,9 +71,6 @@ sub paralogRemover{
 	}
 
 
-	#Load tree file
-	my $str = Bio::TreeIO->new(-file =>$treefile, -format => 'nexus');
-	my $tree = $str->next_tree();
 
 	#Puts all leaves in an array
 	my @leaves = $tree->get_leaf_nodes();
@@ -78,7 +80,7 @@ sub paralogRemover{
 	for (@leaves){
 	
 		
-		if( checkIfBacteria($_) ){
+		if( checkIfBacteria($_, \%groups) ){
 			push(@bacteria, $_);
 		}
 	}
@@ -92,7 +94,7 @@ sub paralogRemover{
 	}
 
 	#Checks if the bacterial species in the tree are monophyletic 
-	if (checkIfMonophyletic(\@bacteria)){
+	if (checkIfMonophyletic(\@bacteria, $tree, \%groups)){
 		#re-root tree with bacteria (the first one in the array)
 		$tree->reroot($tree->get_lca(-nodes => \@bacteria)); 
 	}
@@ -112,7 +114,7 @@ sub paralogRemover{
 
 	#gets bacterial nodes of re-rooted tree
 	for (@reLeaves){
-		if( checkIfBacteria($_) ){
+		if( checkIfBacteria($_, \%groups) ){
 			push(@reBacteria, $_);
 		}
 	}
@@ -128,7 +130,7 @@ sub paralogRemover{
 		}
 	
 		#Checks that all species names coorrespond to the ones in the groupfile
-		typoLocator($keyName) or die "ERROR: Typo (" . $keyName . ") in treefile: " . $treefile . "\n Please correct this before running Tree Doctor\n" ;
+		typoLocator($keyName, \%groups) or die "ERROR: Typo (" . $keyName . ") in treefile: " . $treefile . "\n Please correct this before running Tree Doctor\n" ;
 	
 		#first and second part of id
 		$speciesName = getName($_, 2);
@@ -156,7 +158,7 @@ sub paralogRemover{
 		
 		print MYFILE "\n" . "ParalogSpecies: " .  $paralog . "\n";
 	
-		my @paralogClade = getClade(\@paralogNodes);
+		my @paralogClade = getClade(\@paralogNodes, $tree);
 	
 	#	print MYFILE "ParalogClade:\n"; 
 	#	for (@paralogClade){
@@ -164,7 +166,7 @@ sub paralogRemover{
 	#	}
 	
 		print MYFILE "Group: " . $groups{getName($paralogNodes[0], 1)} . "\n";
-		my $startIndex = checkMonophyleticIndex(\@paralogClade, $groups{getName($paralogNodes[0], 1)});
+		my $startIndex = checkMonophyleticIndex(\@paralogClade, $groups{getName($paralogNodes[0], 1)}, \%groups);
 		my @newParalogClade;
 	
 		print MYFILE "StartIndex: " . $startIndex . "\n"; 
@@ -228,21 +230,14 @@ sub paralogRemover{
 			
 			
 				}
-		
-	#			print MYFILE "before print MYFILEing removedPAralog\n";
-	#			for (@removedParalog){
-	#				print MYFILE $_->id . "\n";
-	#			}
-		
-	#			print MYFILE "after print MYFILEing removedParalog\n";
 			
 				print MYFILE "ParalogNode: " . $paralogNode->id . "\n";
 				
 				print MYFILE "parlogGroup: " . $groups{getName($paralogNode, 1)} . "\n";
 			
-				@newParalogClade = getClade(\@removedParalog);
+				@newParalogClade = getClade(\@removedParalog, $tree);
 			 
-				$monoIndex = checkMonophyleticIndex(\@newParalogClade, $groups{getName($paralogNodes[0], 1)});
+				$monoIndex = checkMonophyleticIndex(\@newParalogClade, $groups{getName($paralogNodes[0], 1)}, \%groups);
 		
 				print MYFILE "MonoIndex: " . $monoIndex . " MaxIndex: " . $maxIndex . "\n";
 				if ($monoIndex > $maxIndex){
@@ -276,7 +271,7 @@ sub paralogRemover{
 	
 	
 	
-		print MYFILE "Initializing treeTrimming!\n";
+		print MYFILE "Initializing branchTrimming!\n";
 	
 		my %branchLengths;
 		for(@paralogNodes){
@@ -301,6 +296,7 @@ sub paralogRemover{
 			
 				for my $leaf (@reLeaves){
 					if ($leaf eq $key && $leaf ne $min_key ){
+ 						print MYFILE "Removing the following OTU because of long branch length: " . $leaf->id . "\n"; 
 						$tree->remove_Node($leaf);
 					}
 				}		 
@@ -327,11 +323,11 @@ sub paralogRemover{
 	my @paraFreeLeaves = $tree->get_leaf_nodes();
 
 	print MYFILE "Number of leaves after paralogs are removed: " . @paraFreeLeaves . "\n";
-
-	my $treeio = new Bio::TreeIO(-file => '>outputTree.newick', -format => 'newick');
-
-	$treeio->write_tree($tree);
-
+	
+	close (MYFILE);
+	
+	return $tree;
+	
 }
 
 #			  # 	
@@ -341,6 +337,7 @@ sub paralogRemover{
 sub checkIfBacteria{
 
 	my $nodeName = getName($_[0], 1);
+	my %groups = %{$_[1]};
 	
 	if ($nodeName eq "Ca"){
 		$nodeName = getName($_[0], 2);
@@ -353,7 +350,7 @@ sub checkIfBacteria{
 
 sub typoLocator{
 
-	
+	my %groups = %{$_[1]};
 	
 	if ($groups{$_[0]}){
 		return 1;
@@ -363,17 +360,12 @@ sub typoLocator{
 
 sub checkIfMonophyletic{
 	my @nodes = @{$_[0]};
-#	my $lca = $tree->get_lca(-nodes => \@nodes);
-#	my @children;
+	my $tree = $_[1];
+	my %groups = %{$_[2]};
 	
-#	foreach ($lca->get_all_Descendents()){
-#		if	($_->is_Leaf()){
-#			push(@children, $_);
-#		}
-#	}	
-	my @children = getClade(\@nodes);
+	my @children = getClade(\@nodes, $tree);
 			
-	if (checkIfWithinTheSameGroup(\@children)){
+	if (checkIfWithinTheSameGroup(\@children, \%groups)){
 		return 1;
 	}		
 	else {
@@ -385,6 +377,7 @@ sub checkIfMonophyletic{
 #Input: Array with nodes. Returns true if all nodes belong to the same group, otherwise false.
 sub checkIfWithinTheSameGroup{
 	my @nodeArray = @{$_[0]};
+	my %groups = %{$_[1]};
 	my @compareArray;	
 		
 	for(@nodeArray){
@@ -409,6 +402,7 @@ sub checkIfWithinTheSameGroup{
 sub getClade{
 	
 	my @nodes = @{$_[0]};
+	my $tree = $_[1];
 	my $lca = $tree->get_lca(-nodes => \@nodes);
 	my @children;
 	
@@ -426,6 +420,7 @@ sub checkMonophyleticIndex{
 	
 	my @children = @{$_[0]};
 	my $groupName = $_[1];
+	my %groups = %{$_[2]};
 		
 	my $total = @children;
 	my $counter = 0;
