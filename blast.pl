@@ -138,9 +138,6 @@ for(my $i=0; $i<$aln->no_sequences; $i++){
 	}
 }
 
-
-		
-
 #### Things to think about
 #What if this sequence is better than the one we already have? Remove the one we have?
 #Realign? Or just take blast hit that fits?
