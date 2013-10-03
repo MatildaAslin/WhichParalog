@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+#Main author: Matilda Aslin
 
 package Paralog;
 
@@ -39,13 +40,10 @@ sub paralogRemover{
 	my $str = Bio::TreeIO->new(-file =>$treefile, -format => 'nexus');
 	my $tree = $str->next_tree();
 
+	#Opens filehandle to LOG file
 	open (MYFILE, '>>Paralog-LOG.txt');
-
-	#Saving input parameters
 	
-	
-	#"GetOptions ("t|treefile=s" => \$treefile, "g|groupfile=s" => \$groupfile);
-
+	#Opens filehandle to groupfile 
 	open(INFILE, $groupfile) or die "Can't open file: $!\n";
 
 	#Make hash out of groupfile (Key: Species, Value: Group) 
@@ -57,6 +55,7 @@ sub paralogRemover{
 	
 		my @species = split("_", $protein);
 	
+		#Special case for Candidatus sepcies
 		if ($species[0] eq "Ca"){
 		
 			$groups{$species[0] . "_" . $species[1]} = $groupname;
@@ -95,17 +94,13 @@ sub paralogRemover{
 
 	#Checks if the bacterial species in the tree are monophyletic 
 	if (checkIfMonophyletic(\@bacteria, $tree, \%groups)){
+		
 		#re-root tree with bacteria (the first one in the array)
 		$tree->reroot($tree->get_lca(-nodes => \@bacteria)); 
 	}
-	#Temporary else-statement
 	else {
 		die "Bacteria in tree are not monophyletic!";
 	}
-
-	#my $treeio1 = new Bio::TreeIO(-file => '>outputTree-ReRoot.newick', -format => 'newick');
-
-	#$treeio1->write_tree($tree);
 
 	#Get leaves of re-rooted tree
 	my @reLeaves = $tree->get_leaf_nodes();
@@ -129,16 +124,18 @@ sub paralogRemover{
 			$keyName = getName($_, 2)
 		}
 	
-		#Checks that all species names coorrespond to the ones in the groupfile
+		#Checks that all species names correspond to the ones in the groupfile
 		typoLocator($keyName, \%groups) or die "ERROR: Typo (" . $keyName . ") in treefile: " . $treefile . "\n Please correct this before running Tree Doctor\n" ;
 	
 		#first and second part of id
 		$speciesName = getName($_, 2);
 	
+		#Species names are put in a hash
 		$leavesName{$speciesName}++;
 	}
 
-	#Check if there are >1 of one species in tree
+	#Checks if there are >1 of one species in tree
+	#They are identified as a species containing paralogs
 	for (keys %leavesName){
 		if($leavesName{$_} > 1){
 			push(@paralogSpecies,$_);
@@ -148,29 +145,30 @@ sub paralogRemover{
 	foreach (@paralogSpecies){
 		my @paralogNodes;
 		my $paralog = $_;
-	
-		for(@reLeaves){
 		
+		#Goes through all leaves and get all OTUs for $paralog	
+		for(@reLeaves){
+			
 			if(getName($_, 2) eq $paralog){
 				push(@paralogNodes, $_)
 			}
 		}
 		
 		print MYFILE "\n" . "ParalogSpecies: " .  $paralog . "\n";
-	
+		
 		my @paralogClade = getClade(\@paralogNodes, $tree);
-	
-	#	print MYFILE "ParalogClade:\n"; 
-	#	for (@paralogClade){
-	#		print MYFILE $_->id . "\n"; 
-	#	}
-	
+		
 		print MYFILE "Group: " . $groups{getName($paralogNodes[0], 1)} . "\n";
+	
+		#Monophyletic index for paralogclade	
 		my $startIndex = checkMonophyleticIndex(\@paralogClade, $groups{getName($paralogNodes[0], 1)}, \%groups);
+	
 		my @newParalogClade;
 	
 		print MYFILE "StartIndex: " . $startIndex . "\n"; 
 	
+		#If monophyletic index is 1, it can not be improved, 
+		#so monophyletic optimizing is only performed is if $startIndex < 1
 		unless ($startIndex == 1){
 		
 			print MYFILE "Initializing monophyletic optimizing!\n";
@@ -181,7 +179,7 @@ sub paralogRemover{
 			}
 		
 			my $maxIndex = $startIndex;
-			my @damp = @paralogNodes;
+			my @copyNodes = @paralogNodes;
 			my $candidate;
 		
 			for my $paralogNode (@paralogNodes){
@@ -189,13 +187,16 @@ sub paralogRemover{
 				my @removedParalog;
 				my $monoIndex;
 					
-				for my $node (@damp){
+				#Nodes are gathered to be able to get new clade without $paralogNode
+				#They are put into @removedParalog
+				for my $node (@copyNodes){
 					unless ($paralogNode->internal_id eq $node->internal_id){
 				
 						my @kids;
 						my $ancestor;
 						my @decendents;
-					
+						
+						
 						if (@paralogNodes == 2){
 							while (@kids < 2){
 								$ancestor = $node->ancestor;
@@ -237,9 +238,13 @@ sub paralogRemover{
 			
 				@newParalogClade = getClade(\@removedParalog, $tree);
 			 
+			 	#Checks monophyletic index for new clade
 				$monoIndex = checkMonophyleticIndex(\@newParalogClade, $groups{getName($paralogNodes[0], 1)}, \%groups);
 		
 				print MYFILE "MonoIndex: " . $monoIndex . " MaxIndex: " . $maxIndex . "\n";
+				
+				#If monoIndex is greater than maxIndex then
+				#the current $paralogNode is set as candidate for removal
 				if ($monoIndex > $maxIndex){
 					$maxIndex = $monoIndex;
 					$candidate = $paralogNode;
@@ -252,10 +257,15 @@ sub paralogRemover{
 			}
 		
 			print MYFILE "maxIndex: " . $maxIndex . " > " . "StartIndex: " . $startIndex . "\n" ;
+			
+			#If the final $MaxIndex is greater than the $startIndex --> $candidate is removed
 			if ($maxIndex > $startIndex){
+			
 				print MYFILE "The following OTU is removed to improve monophyly: " . $candidate->id . "\n";
+				
 				$tree->remove_Node($candidate);
 			
+				
 				#Update ParalogNodes
 				my @temp;
 				for (@paralogNodes){
@@ -274,6 +284,8 @@ sub paralogRemover{
 		print MYFILE "Initializing branchTrimming!\n";
 	
 		my %branchLengths;
+		
+		#Hash is made with node as key and branch length as value
 		for(@paralogNodes){
 		
 			$branchLengths{$_} = $_->branch_length();
@@ -291,18 +303,23 @@ sub paralogRemover{
 		}
 
 
-
+		#All paralogs are removed except the one the the shortest branch
 		for my $key (keys %branchLengths){
 			
 				for my $leaf (@reLeaves){
+				
 					if ($leaf eq $key && $leaf ne $min_key ){
+					
  						print MYFILE "Removing the following OTU because of long branch length: " . $leaf->id . "\n"; 
+					
 						$tree->remove_Node($leaf);
 					}
 				}		 
 			
+				
 				my @paraFreeLeaves = $tree->get_leaf_nodes();
 			
+				#Leaf nodes with no IDs are removed
 				for(@paraFreeLeaves){
 
 					if(!$_->id){
@@ -326,6 +343,7 @@ sub paralogRemover{
 	
 	close (MYFILE);
 	
+	#Final tree is returned
 	return $tree;
 	
 }
@@ -374,7 +392,7 @@ sub checkIfMonophyletic{
 
 }	
 
-#Input: Array with nodes. Returns true if all nodes belong to the same group, otherwise false.
+#Input: Array with nodes and group hash. Returns true if all nodes belong to the same group, otherwise false.
 sub checkIfWithinTheSameGroup{
 	my @nodeArray = @{$_[0]};
 	my %groups = %{$_[1]};
@@ -397,7 +415,8 @@ sub checkIfWithinTheSameGroup{
 		
 }	 
 
-#Input: Array with nodes. Returns all leaf nodes within clade, where clade is defined as all the decendents of the last common ancestor
+#Input: Array with nodes and tree. Returns all leaf nodes within clade, 
+#where clade is defined as all the decendents of the last common ancestor
 #of all nodes in @nodes.
 sub getClade{
 	
@@ -415,7 +434,8 @@ sub getClade{
 	return @children;
 }
 
-#Input: Array with nodes and groupname
+#Input: Array with nodes, groupname and group hash.
+#Counts the fraction of groupname among nodes
 sub checkMonophyleticIndex{
 	
 	my @children = @{$_[0]};

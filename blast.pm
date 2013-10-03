@@ -140,7 +140,7 @@ sub splitBlast{
 	}
 	
 	#If new sequence is added, return alignment, else return 0
-	if (@name != $realn->no_sequences){
+	if ($realn && @name != $realn->no_sequences){
 		return $realn;
 	}
 	else{

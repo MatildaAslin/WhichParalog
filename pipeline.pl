@@ -17,6 +17,19 @@ B<Paralog.pm> - This modules removes paralogs in two steps.
 First it checks if a paralog decreases the monophyly of the group the species belong to. It is then removed. 
 If there are any paralogs left, they are removed based on branch length, only keeping the one with the shortest branch length.
 
+=head1 REQUIREMENTS
+
+The following software need to be installed before running the pipeline: 
+
+=head2 Software
+
+Blast+E<10> 
+MAFFT E<10>
+
+=head2 Perl-modules
+
+Bioperl E<10>
+Bio::Tools::Run::StandAloneBlastPlus E<10>
   
 =head1 USAGE
 
@@ -45,8 +58,23 @@ eury	Aciduliprofundum_boonei_T469
 
 =head1 OUTPUT
 
-=head2 Alignment file
- New alignment in fasta. If it been modified 
+=head2 Alignment
+
+ New alignment in fasta. It is named: 
+ 
+ splitBlastAln.fasta - if it has been modified by both modules.
+ 
+ OR
+ 
+ splitAln.fasta - if it has been modified by the Split module solely.
+ 
+=head2 Tree
+ 
+ outputTree.newick - Tree (newick) modified by Paralog module.
+
+=head2 Paralog-LOG
+
+Log file for Paralog module. 
 
 =head1 AUTHORS
 
@@ -93,10 +121,10 @@ my $splitAlign = split_gene($aln);
 
 #run blast
 
-if(my $blastAln = splitBlast($aln, $db_dir)){
+if(my $blastAln = splitBlast($splitAlign, $db_dir)){
 	my $splitAlign2 = split_gene($blastAln);
 	my $out = new Bio::AlignIO(-file => '>splitBlastAln.fasta', -format => 'fasta');
-	$out->write_aln($blastAln);
+	$out->write_aln($splitAlign2);
 }
 else {
 	my $out = new Bio::AlignIO(-file => '>splitAln.fasta', -format => 'fasta');
