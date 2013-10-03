@@ -1513,3 +1513,306 @@ StartIndex: 1
 Initializing branchTrimming!
 Removing the following OTU because of long branch length: Trichomonas_vaginalis_A9NIQ8
 Number of leaves after paralogs are removed: 87
+Number of leaves after re-rooting: 110
+
+ParalogSpecies: Leishmania_infant
+Group: euk
+StartIndex: 1
+Initializing branchTrimming!
+Removing the following OTU because of long branch length: Leishmania_infant_LinJ28.0560
+
+ParalogSpecies: Vulcanisaeta_distri
+Group: cren
+StartIndex: 0.9375
+Initializing monophyletic optimizing!
+ParalogNodes:
+Vulcanisaeta_distri_307596612
+Vulcanisaeta_distri_307595014
+Vulcanisaeta_distri_307594299
+ParalogNode: Vulcanisaeta_distri_307596612
+parlogGroup: cren
+MonoIndex: 1 MaxIndex: 0.9375
+Candidate: Vulcanisaeta_distri_307596612
+ParalogNode: Vulcanisaeta_distri_307595014
+parlogGroup: cren
+MonoIndex: 0.9375 MaxIndex: 1
+Candidate: Vulcanisaeta_distri_307596612
+ParalogNode: Vulcanisaeta_distri_307594299
+parlogGroup: cren
+MonoIndex: 0.9375 MaxIndex: 1
+Candidate: Vulcanisaeta_distri_307596612
+maxIndex: 1 > StartIndex: 0.9375
+The following OTU is removed to improve monophyly: Vulcanisaeta_distri_307596612
+Initializing branchTrimming!
+Removing the following OTU because of long branch length: Vulcanisaeta_distri_307594299
+
+ParalogSpecies: Thermofilum_pendens
+Group: cren
+StartIndex: 0.928571428571429
+Initializing monophyletic optimizing!
+ParalogNodes:
+Thermofilum_pendens_119719653
+Thermofilum_pendens_119719925
+Thermofilum_pendens_119719931
+ParalogNode: Thermofilum_pendens_119719653
+parlogGroup: cren
+MonoIndex: 0.928571428571429 MaxIndex: 0.928571428571429
+ParalogNode: Thermofilum_pendens_119719925
+parlogGroup: cren
+MonoIndex: 0.928571428571429 MaxIndex: 0.928571428571429
+ParalogNode: Thermofilum_pendens_119719931
+parlogGroup: cren
+MonoIndex: 1 MaxIndex: 0.928571428571429
+Candidate: Thermofilum_pendens_119719931
+maxIndex: 1 > StartIndex: 0.928571428571429
+The following OTU is removed to improve monophyly: Thermofilum_pendens_119719931
+Initializing branchTrimming!
+Removing the following OTU because of long branch length: Thermofilum_pendens_119719653
+
+ParalogSpecies: Saccharomyces_cerevis
+Group: euk
+StartIndex: 1
+Initializing branchTrimming!
+Removing the following OTU because of long branch length: Saccharomyces_cerevis_YER179W
+
+ParalogSpecies: Methanopyrus_kandler
+Group: eury
+StartIndex: 0.372340425531915
+Initializing monophyletic optimizing!
+ParalogNodes:
+Methanopyrus_kandler_20094468
+Methanopyrus_kandler_20094878
+ParalogNode: Methanopyrus_kandler_20094468
+parlogGroup: eury
+MonoIndex: 0.363636363636364 MaxIndex: 0.372340425531915
+ParalogNode: Methanopyrus_kandler_20094878
+parlogGroup: eury
+MonoIndex: 0.372340425531915 MaxIndex: 0.372340425531915
+maxIndex: 0.372340425531915 > StartIndex: 0.372340425531915
+Initializing branchTrimming!
+Removing the following OTU because of long branch length: Methanopyrus_kandler_20094468
+
+ParalogSpecies: Ca_Nitrososphaera
+Group: thaum
+StartIndex: 0.857142857142857
+Initializing monophyletic optimizing!
+ParalogNodes:
+Ca_Nitrososphaera_g_408404276
+Ca_Nitrososphaera_g_408405119
+ParalogNode: Ca_Nitrososphaera_g_408404276
+parlogGroup: thaum
+MonoIndex: 1 MaxIndex: 0.857142857142857
+Candidate: Ca_Nitrososphaera_g_408404276
+ParalogNode: Ca_Nitrososphaera_g_408405119
+parlogGroup: thaum
+MonoIndex: 0.857142857142857 MaxIndex: 1
+Candidate: Ca_Nitrososphaera_g_408404276
+maxIndex: 1 > StartIndex: 0.857142857142857
+The following OTU is removed to improve monophyly: Ca_Nitrososphaera_g_408404276
+Initializing branchTrimming!
+
+ParalogSpecies: Halalkalicoccus_jeo
+Group: eury
+StartIndex: 0.369565217391304
+Initializing monophyletic optimizing!
+ParalogNodes:
+Halalkalicoccus_jeo_300710392
+Halalkalicoccus_jeo_300709641
+ParalogNode: Halalkalicoccus_jeo_300710392
+parlogGroup: eury
+MonoIndex: 1 MaxIndex: 0.369565217391304
+Candidate: Halalkalicoccus_jeo_300710392
+ParalogNode: Halalkalicoccus_jeo_300709641
+parlogGroup: eury
+MonoIndex: 0.369565217391304 MaxIndex: 1
+Candidate: Halalkalicoccus_jeo_300710392
+maxIndex: 1 > StartIndex: 0.369565217391304
+The following OTU is removed to improve monophyly: Halalkalicoccus_jeo_300710392
+Initializing branchTrimming!
+
+ParalogSpecies: Plasmodium_falcip
+Group: euk
+StartIndex: 1
+Initializing branchTrimming!
+Removing the following OTU because of long branch length: Plasmodium_falcip_PF11_0087_1
+
+ParalogSpecies: Ca_Korarchaeum
+Group: kor
+StartIndex: 0.0222222222222222
+Initializing monophyletic optimizing!
+ParalogNodes:
+Ca_Korarchaeum_cryp_170291049
+Ca_Korarchaeum_cryp_170290825
+ParalogNode: Ca_Korarchaeum_cryp_170291049
+parlogGroup: kor
+MonoIndex: 0.166666666666667 MaxIndex: 0.0222222222222222
+Candidate: Ca_Korarchaeum_cryp_170291049
+ParalogNode: Ca_Korarchaeum_cryp_170290825
+parlogGroup: kor
+MonoIndex: 0.0222222222222222 MaxIndex: 0.166666666666667
+Candidate: Ca_Korarchaeum_cryp_170291049
+maxIndex: 0.166666666666667 > StartIndex: 0.0222222222222222
+The following OTU is removed to improve monophyly: Ca_Korarchaeum_cryp_170291049
+Initializing branchTrimming!
+
+ParalogSpecies: Thermoproteus_uzoni
+Group: cren
+StartIndex: 0.916666666666667
+Initializing monophyletic optimizing!
+ParalogNodes:
+Thermoproteus_uzoni_327311698
+Thermoproteus_uzoni_327310834
+ParalogNode: Thermoproteus_uzoni_327311698
+parlogGroup: cren
+MonoIndex: 1 MaxIndex: 0.916666666666667
+Candidate: Thermoproteus_uzoni_327311698
+ParalogNode: Thermoproteus_uzoni_327310834
+parlogGroup: cren
+MonoIndex: 0.916666666666667 MaxIndex: 1
+Candidate: Thermoproteus_uzoni_327311698
+maxIndex: 1 > StartIndex: 0.916666666666667
+The following OTU is removed to improve monophyly: Thermoproteus_uzoni_327311698
+Initializing branchTrimming!
+
+ParalogSpecies: Pyrobaculum_calidif
+Group: cren
+StartIndex: 0.909090909090909
+Initializing monophyletic optimizing!
+ParalogNodes:
+Pyrobaculum_calidif_126460684
+Pyrobaculum_calidif_126460634
+Pyrobaculum_calidif_126459376
+ParalogNode: Pyrobaculum_calidif_126460684
+parlogGroup: cren
+MonoIndex: 1 MaxIndex: 0.909090909090909
+Candidate: Pyrobaculum_calidif_126460684
+ParalogNode: Pyrobaculum_calidif_126460634
+parlogGroup: cren
+MonoIndex: 0.909090909090909 MaxIndex: 1
+Candidate: Pyrobaculum_calidif_126460684
+ParalogNode: Pyrobaculum_calidif_126459376
+parlogGroup: cren
+MonoIndex: 0.909090909090909 MaxIndex: 1
+Candidate: Pyrobaculum_calidif_126460684
+maxIndex: 1 > StartIndex: 0.909090909090909
+The following OTU is removed to improve monophyly: Pyrobaculum_calidif_126460684
+Initializing branchTrimming!
+Removing the following OTU because of long branch length: Pyrobaculum_calidif_126459376
+
+ParalogSpecies: Caldiarchaeum_subte
+Group: aiga
+StartIndex: 0.0645161290322581
+Initializing monophyletic optimizing!
+ParalogNodes:
+Caldiarchaeum_subte_343485007
+Caldiarchaeum_subte_343485851
+ParalogNode: Caldiarchaeum_subte_343485007
+parlogGroup: aiga
+MonoIndex: 0.0645161290322581 MaxIndex: 0.0645161290322581
+ParalogNode: Caldiarchaeum_subte_343485851
+parlogGroup: aiga
+MonoIndex: 0.03125 MaxIndex: 0.0645161290322581
+maxIndex: 0.0645161290322581 > StartIndex: 0.0645161290322581
+Initializing branchTrimming!
+Removing the following OTU because of long branch length: Caldiarchaeum_subte_343485851
+
+ParalogSpecies: Haloferax_volcanii
+Group: eury
+StartIndex: 0.388235294117647
+Initializing monophyletic optimizing!
+ParalogNodes:
+Haloferax_volcanii__292656668
+Haloferax_volcanii__292654282
+ParalogNode: Haloferax_volcanii__292656668
+parlogGroup: eury
+MonoIndex: 1 MaxIndex: 0.388235294117647
+Candidate: Haloferax_volcanii__292656668
+ParalogNode: Haloferax_volcanii__292654282
+parlogGroup: eury
+MonoIndex: 0.388235294117647 MaxIndex: 1
+Candidate: Haloferax_volcanii__292656668
+maxIndex: 1 > StartIndex: 0.388235294117647
+The following OTU is removed to improve monophyly: Haloferax_volcanii__292656668
+Initializing branchTrimming!
+
+ParalogSpecies: Homo_sapiens
+Group: euk
+StartIndex: 0.202380952380952
+Initializing monophyletic optimizing!
+ParalogNodes:
+Homo_sapiens_ENSP00000336701
+Homo_sapiens_ENSP00000216024
+Homo_sapiens_ENSP00000267868
+ParalogNode: Homo_sapiens_ENSP00000336701
+parlogGroup: euk
+MonoIndex: 1 MaxIndex: 0.202380952380952
+Candidate: Homo_sapiens_ENSP00000336701
+ParalogNode: Homo_sapiens_ENSP00000216024
+parlogGroup: euk
+MonoIndex: 0.202380952380952 MaxIndex: 1
+Candidate: Homo_sapiens_ENSP00000336701
+ParalogNode: Homo_sapiens_ENSP00000267868
+parlogGroup: euk
+MonoIndex: 0.202380952380952 MaxIndex: 1
+Candidate: Homo_sapiens_ENSP00000336701
+maxIndex: 1 > StartIndex: 0.202380952380952
+The following OTU is removed to improve monophyly: Homo_sapiens_ENSP00000336701
+Initializing branchTrimming!
+Removing the following OTU because of long branch length: Homo_sapiens_ENSP00000216024
+
+ParalogSpecies: Arabidopsis_tha
+Group: euk
+StartIndex: 0.182926829268293
+Initializing monophyletic optimizing!
+ParalogNodes:
+Arabidopsis_tha_AT2G45280.1_P
+Arabidopsis_tha_AT3G22880.1_P
+Arabidopsis_tha_AT5G20850.1_P
+ParalogNode: Arabidopsis_tha_AT2G45280.1_P
+parlogGroup: euk
+MonoIndex: 1 MaxIndex: 0.182926829268293
+Candidate: Arabidopsis_tha_AT2G45280.1_P
+ParalogNode: Arabidopsis_tha_AT3G22880.1_P
+parlogGroup: euk
+MonoIndex: 0.182926829268293 MaxIndex: 1
+Candidate: Arabidopsis_tha_AT2G45280.1_P
+ParalogNode: Arabidopsis_tha_AT5G20850.1_P
+parlogGroup: euk
+MonoIndex: 0.182926829268293 MaxIndex: 1
+Candidate: Arabidopsis_tha_AT2G45280.1_P
+maxIndex: 1 > StartIndex: 0.182926829268293
+The following OTU is removed to improve monophyly: Arabidopsis_tha_AT2G45280.1_P
+Initializing branchTrimming!
+Removing the following OTU because of long branch length: Arabidopsis_tha_AT3G22880.1_P
+
+ParalogSpecies: Pyrobaculum_aerophil
+Group: cren
+StartIndex: 0.888888888888889
+Initializing monophyletic optimizing!
+ParalogNodes:
+Pyrobaculum_aerophil_18312075
+Pyrobaculum_aerophil_18313927
+ParalogNode: Pyrobaculum_aerophil_18312075
+parlogGroup: cren
+MonoIndex: 1 MaxIndex: 0.888888888888889
+Candidate: Pyrobaculum_aerophil_18312075
+ParalogNode: Pyrobaculum_aerophil_18313927
+parlogGroup: cren
+MonoIndex: 0.888888888888889 MaxIndex: 1
+Candidate: Pyrobaculum_aerophil_18312075
+maxIndex: 1 > StartIndex: 0.888888888888889
+The following OTU is removed to improve monophyly: Pyrobaculum_aerophil_18312075
+Initializing branchTrimming!
+
+ParalogSpecies: Entamoeba_histolytica
+Group: euk
+StartIndex: 1
+Initializing branchTrimming!
+Removing the following OTU because of long branch length: Entamoeba_histolytica__C4M4K4
+
+ParalogSpecies: Trichomonas_vaginalis
+Group: euk
+StartIndex: 1
+Initializing branchTrimming!
+Removing the following OTU because of long branch length: Trichomonas_vaginalis_A9NIQ8
+Number of leaves after paralogs are removed: 87

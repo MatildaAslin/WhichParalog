@@ -40,6 +40,7 @@ sub splitBlast{
 	my @id;
 	my @blastinfo;
 	my @pos=(0,0);
+	my $realn;
 
 	#Sort alignment alphabetically
 	$aln->sort_alphabetically;
@@ -133,7 +134,7 @@ sub splitBlast{
 			
 				#Download Mafft: http://mafft.cbrc.jp/alignment/software/
 				my $alnfactory=Bio::Tools::Run::Alignment::MAFFT->new(); ## Can choose parameters ##
-				my $realn = $alnfactory->align(\@seq_array);	#Realign with new sequence
+				$realn = $alnfactory->align(\@seq_array);	#Realign with new sequence
 			}
 		}
 	}

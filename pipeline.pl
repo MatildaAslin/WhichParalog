@@ -93,10 +93,10 @@ my $splitAlign = split_gene($aln);
 
 #run blast
 
-if(my $blastAln = splitBlast($splitAlign, $db_dir)){
+if(my $blastAln = splitBlast($aln, $db_dir)){
 	my $splitAlign2 = split_gene($blastAln);
 	my $out = new Bio::AlignIO(-file => '>splitBlastAln.fasta', -format => 'fasta');
-	$out->write_aln($splitAlign2);
+	$out->write_aln($blastAln);
 }
 else {
 	my $out = new Bio::AlignIO(-file => '>splitAln.fasta', -format => 'fasta');
