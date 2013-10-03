@@ -19,6 +19,10 @@ If there are any paralogs left, they are removed based on branch length, only ke
 
 =head1 REQUIREMENTS
 
+For Tree Doctor to work properly it is important that the OTUs in the tree and alignment files have the same names
+as the ones in the group file. Also the blast databases should have titles in the format "Genus_species" such as "Homo_sapiens". 
+All species should have a fasta file in that format too, without any file extension.  
+
 The following software need to be installed before running the pipeline: 
 
 =head2 Software
