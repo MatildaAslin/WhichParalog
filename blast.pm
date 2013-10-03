@@ -1,5 +1,6 @@
 #!/usr/bin/perl
-
+# Main author: Jessika Nordin
+  
 package Blast;
 
 use base 'Exporter';
@@ -38,7 +39,6 @@ sub splitBlast{
 	my @len;
 	my @name;
 	my @id;
-	my @blastinfo;
 	my @pos=(0,0);
 	my $realn;
 
