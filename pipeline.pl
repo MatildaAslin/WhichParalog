@@ -1,5 +1,65 @@
 #!/usr/bin/perl
 
+=pod
+
+=head1 SYNOPSIS
+
+Tree Doctor pipeline. It uses 3 modules in the following order: Split.pm, Blast.pm and Paralog.pm.
+
+B<Split.pm> - Identifies "split gene" candidates and merge them if the overlap is less than a certain threshold. 
+If two sequences are merged, the sequences are re-aligned with MAFFT (with default parameters). 
+
+B<Blast.pm> - There can be a split gene present in an alignment even though only one part is present in the alignment. 
+This module aims to find the (potentially) missing part by using psiblast. 
+If a sequence is added by this module, Split.pm will re-run and (potentially) merge the sequence with its "split gene partner".
+
+B<Paralog.pm> - This modules removes paralogs in two steps.
+First it checks if a paralog decreases the monophyly of the group the species belong to. It is then removed. 
+If there are any paralogs left, they are removed based on branch length, only keeping the one with the shortest branch length.
+
+  
+=head1 USAGE
+
+perl pipeline.pl -a <alignmentfile> -db <path to blastdatabases> -t <treefile> -g <groupfile>
+
+=head1 INPUT
+
+=head2 -a | --alignment
+
+Alignment file in fasta format.
+
+=head2 -db | --db_dir
+
+Path to folder where blastdatabses for the organisms in the alignment/tree are present.
+
+=head2 -t | --treefile
+
+Treefile in nexus format.
+
+=head2 -g | --groupfile
+
+Tab-delimited file with group and OTU name. 
+
+For example: E<10>
+eury	Aciduliprofundum_boonei_T469 
+
+=head1 OUTPUT
+
+=head2 Alignment file
+ New alignment in fasta. If it been modified 
+
+=head1 AUTHORS
+
+Jessika Nordin (Jessika.Nordin.0726@student.uu.se) E<10>
+Veronika Scholz (Veronika.Scholz.0998@student.uu.se)E<10>
+Matilda Aslin (Matilda.Aslin.3036@student.uu.se)E<10>
+
+=head1 DATE
+
+Thu  3 Oct 2013 11:19:44 CEST
+
+=cut
+
 use strict;
 use warnings;
 use File::Slurp;
@@ -35,11 +95,11 @@ my $splitAlign = split_gene($aln);
 
 if(my $blastAln = splitBlast($splitAlign, $db_dir)){
 	my $splitAlign2 = split_gene($blastAln);
-	my $out = new Bio::AlignIO(-file => '>splitBlastAln.phy', -format => 'fasta');
+	my $out = new Bio::AlignIO(-file => '>splitBlastAln.fasta', -format => 'fasta');
 	$out->write_aln($splitAlign2);
 }
 else {
-	my $out = new Bio::AlignIO(-file => '>splitAln.phy', -format => 'fasta');
+	my $out = new Bio::AlignIO(-file => '>splitAln.fasta', -format => 'fasta');
 	$out->write_aln($splitAlign);
 }
 
